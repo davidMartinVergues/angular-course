@@ -109,7 +109,7 @@ Vamos a configurar diferentes ambientes, por ejemplo el ambiente de staging (amb
 
 Para correr pruebas unitarias.
 
-7. `ackage.json`
+7. `package.json`
 Lo crea node.
 dnd se especificas las dependencias del proyecto, veriones, nuestros scripts
 
@@ -144,6 +144,11 @@ v16.14.0
 
 En el tag app-root se renderiza nuestro componente base q es `app.component.html`. Podemos sustituir su contenido con el home page de nuestra app.
 
+### Crear un nuevo componente utilizando angular/cli
+
+```
+ng generate component components/social-media-share-buttons
+```
 
 ### Conceptos básicos de TS 
 
@@ -199,7 +204,7 @@ const dmv2 = new Persona(37, 'dmv');
 
 ### Componentes de angular
 
-Angular divide las responsabiulidades del componente como hemos visto antes. 
+Angular divide las responsabilidades del componente como hemos visto antes. 
 La lógica se escibe en TS y el render lo hace el archivo html.
 
 El component .ts tiene un decorator que le dice que html está ligado qué selector (tag) usará y q archivo de styling 
