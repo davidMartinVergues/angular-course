@@ -1,0 +1,22 @@
+.social-media-container {
+  height: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+}
+
+.button {
+  font-size: 25px;
+}
+
+.button.twitter {
+  color: #1da1f2;
+}
+.button.linkedin {
+  color: #0077b5;
+  padding-left: 15px;
+}
+
+.button:hover {
+  transform: scale(1.3);
+}
