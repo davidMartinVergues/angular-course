@@ -1,5 +1,6 @@
 import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
+import { FormsModule } from '@angular/forms';
 
 import { AppComponent } from './app.component';
 import { TestComponentComponent } from './test-component/test-component.component';
@@ -13,12 +14,10 @@ import { SocialMediaShareButtonsComponent } from './components/social-media-shar
     TestComponentComponent,
     TestComponentDMVComponent,
     TestComponentDMV2Component,
-    SocialMediaShareButtonsComponent
+    SocialMediaShareButtonsComponent,
   ],
-  imports: [
-    BrowserModule
-  ],
+  imports: [BrowserModule, FormsModule],
   providers: [],
-  bootstrap: [AppComponent]
+  bootstrap: [AppComponent],
 })
-export class AppModule { }
+export class AppModule {}

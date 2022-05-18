@@ -8,6 +8,20 @@
 
 <button (click)="age_plus()">age++</button>
 
+<hr>
+
+<!-- ngModel -->
+
+<p>Nombre:{{person.name}}</p>
+<p>Edad:{{person.age}}</p>
+
+<input type="text" #nameInput="ngModel" [(ngModel)]="person.name" required>  <br>
+<input type="number" max="18" min="10" #ageInput="ngModel" [(ngModel)]="person.age" required>
+
+<p>Valid: {{nameInput.valid }}</p>
+<p>Valid: {{ageInput.valid }}</p>
+
+<hr>
 
 <div class="box" (scroll)="miScroll($event)">
   <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, id, debitis numquam provident unde exercitationem recusandae laboriosam nesciunt modi ipsam optio, ullam quae fugiat molestias nulla deserunt maxime corporis quam.

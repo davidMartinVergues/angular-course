@@ -379,3 +379,63 @@ person = {
 ```
 
 Tenemos más eventos que se pueden consultar aquí : [events guide](https://www.eduforbetterment.com/lists-of-useful-events-types-for-event-binding-in-angular/)
+
+### Data Binding
+
+Es una fusión entre el event biding (la sintaxi para marcarlo es (event) ) y setear una propiedad (se usa los [] por ejemplo en un input [value]). 
+
+En Angular para conseguir el **data binding** usamos `ngModel` que combina las dos anteriores y la sintaxi es `[(ngModel)] = "SomeValue" ` esto será muy útil para los imputs.
+
+ngModel en relación a los inputs nos permite:
+
+1. Está pendiente del estado del input
+2. si ese campo es valido o no 
+3. interacción del usuario tiene con ese input 
+4. sincroniza el valor constantemente 
+
+Antes de usar ngModel tenemos que habilitar `angular forms` para ello vamos a `app.module.ts` :
+
+- añadimos el import 
+- añadimos el módulo forms en la sección imports
+
+```javascript
+import { FormsModule } from '@angular/forms';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    TestComponentComponent,
+    TestComponentDMVComponent,
+    TestComponentDMV2Component,
+    SocialMediaShareButtonsComponent,
+  ],
+  imports: [BrowserModule, FormsModule],
+  providers: [],
+  bootstrap: [AppComponent],
+})
+
+```
+
+Para poner en práctica ngModel construiremos un formulario utilizando el paquete `Angular Forms`. 
+
+ahora incluimos el siguiente código en el html 
+
+```html 
+<p>Nombre:{{person.name}}</p>
+<input type="text" [(ngModel)]="person.name">
+```
+
+Con este código cada vez que escribamos en el input colodará ese texto en el <p> sin necesidad de capturar nosotros el evento. 
+
+Con ngModel tb podemos validar ese input, hay q tener encuenta q ngMoel funciona mucho con validaciones nativas de HTML 
+
+```html 
+<p>Nombre:{{person.name}}</p>
+<p>Edad:{{person.age}}</p>
+
+<input type="text" #nameInput="ngModel" [(ngModel)]="person.name" required>  <br>
+<input type="number" max="18" min="10" #ageInput="ngModel" [(ngModel)]="person.age" required>
+
+<p>Valid: {{nameInput.valid }}</p>
+<p>Valid: {{ageInput.valid }}</p>
+```
