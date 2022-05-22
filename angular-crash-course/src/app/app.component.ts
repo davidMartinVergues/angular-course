@@ -13,6 +13,8 @@ export class AppComponent {
 
   btnDisabled = true;
 
+  names: string[] = ['david', 'marc', 'julian'];
+
   person = {
     name: 'dmv',
     age: 66,
@@ -28,6 +30,7 @@ export class AppComponent {
   age_plus() {
     this.person.age++;
   }
+
   miScroll(event: Event) {
     const element = event.target as HTMLElement;
     console.log(element.scrollTop); // en que posición está el scroll
