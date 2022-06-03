@@ -222,6 +222,11 @@ export class AppComponent {
    age = 37;
     img =
     'https://images.prismic.io/mystique/983eac5a-23be-4b1f-af1c-791d6931f760_IMG_1.jpg?auto=compress%2Cformat&w=1350&q=75&fit=crop&ar=3%3A1&fm=pjpg&exp=-10';
+
+    names: string[] | number[] = ['david', 'marc', 'julian']; //acepted
+    names: string[] | number[] = [1,2,3,4]; //acepted
+    names: string[] | number[] = [1,'david']; //not accepted
+    
 }
 ```
 
@@ -275,6 +280,50 @@ Para traer variables declaradas en el componente usamos tb string interpolation
 ### Property Binding 
 
 Manera que podemos modificar atributos de elementos de html desde el controlador, pej modificar el src de una images, etc...
+
+```javascript
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-root',
+  templateUrl: './app.component.html',
+  styleUrls: ['./app.component.css'],
+})
+export class AppComponent {
+
+  public name = 'david';
+  age = 37;
+  img =
+    'https://images.prismic.io/mystique/983eac5a-23be-4b1f-af1c-791d6931f760_IMG_1.jpg?auto=compress%2Cformat&w=1350&q=75&fit=crop&ar=3%3A1&fm=pjpg&exp=-10';
+
+  btnDisabled = true;
+
+  person = {
+    name: 'dmv',
+    age: 66,
+    avatar:
+      'https://images.prismic.io/mystique/983eac5a-23be-4b1f-af1c-791d6931f760_IMG_1.jpg?auto=compress%2Cformat&w=1350&q=75&fit=crop&ar=3%3A1&fm=pjpg&exp=-10',
+  };
+
+  toggleBtn() {
+    this.btnDisabled = this.btnDisabled ? false : true;
+    //this.btnDisabled =!this.btnDisabled;
+  }
+
+  age_plus() {
+    this.person.age++;
+  }
+  miScroll(event: Event) {
+    const element = event.target as HTMLElement;
+    console.log(element.scrollTop); // en que posición está el scroll
+  }
+
+  myKeyup(event: Event) {
+    const element = event.target as HTMLInputElement;
+    this.person.name = element.value;
+  }
+}
+```
 
 ```html
 <button [disabled]="btnDisabled">Enviar</button>
@@ -346,9 +395,7 @@ leemos el evento ocurrido en un elemento HTML, en este caso el evento scroll del
 
 ```html
 <div class="box" (scroll)="miScroll($event)">
-  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, id, debitis numquam provident unde exercitationem recusandae laboriosam nesciunt modi ipsam optio, ullam quae fugiat molestias nulla deserunt maxime corporis quam.
-  Hic debitis beatae rerum, maiores dignissimos praesentium illo repudiandae velit quos a ipsam, quas voluptatem! Nemo perferendis repellat similique hic! Voluptatum aliquam modi totam quas officiis sint adipisci quod ipsam.
-  Minus molestiae vero id numquam dolores, magnam labore aspernatur deleniti odio voluptatibus hic. Tempora debitis rem tempore, quasi quis fugit accusantium veritatis omnis reiciendis aliquam amet exercitationem, recusandae, velit quisquam!</p>
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, id, debitis numquam provident unde exercitationem recusandae laboriosam nesciunt modi ipsam optio, ullam quae fugiat molestias </p>
 </div>
 ```
 
@@ -396,7 +443,7 @@ ngModel en relación a los inputs nos permite:
 Antes de usar ngModel tenemos que habilitar `angular forms` para ello vamos a `app.module.ts` :
 
 - añadimos el import 
-- añadimos el módulo forms en la sección imports
+- añadimos el módulo forms en la sección **imports**
 
 ```javascript
 import { FormsModule } from '@angular/forms';
@@ -410,8 +457,8 @@ import { FormsModule } from '@angular/forms';
     SocialMediaShareButtonsComponent,
   ],
   imports: [BrowserModule, FormsModule],
-  providers: [],
-  bootstrap: [AppComponent],
+    providers: [],
+    bootstrap: [AppComponent],
 })
 
 ```
@@ -438,4 +485,88 @@ Con ngModel tb podemos validar ese input, hay q tener encuenta q ngMoel funciona
 
 <p>Valid: {{nameInput.valid }}</p>
 <p>Valid: {{ageInput.valid }}</p>
+```
+Esta variable `person.name` debe estar en el archivo app.component.ts de mi componente.
+
+Para poder acceder a la validación del campo tenemos que darle un nombre al input que contiene el ngModel, para declarar esta variable lo hacemos dentro del input con esta nomenglatura.
+
+```
+#nameInput="ngModel"
+```
+y para acceder al estado de esa variable hacemos 
+
+```
+{{ nameInput.valid}}
+```
+
+Para validar el input ngModel funciona con las validaciones de HTML. También podemos crear nuetsros custom validators.
+
+#### Custom Validators 
+
+hay que completarlo
+
+https://indepth.dev/posts/1319/the-best-way-to-implement-custom-validators
+
+
+### Directivas de control 
+
+#### ngIf
+
+Permite en función de una validación si se muestra o no ese elemento, podemos añadir un `else`
+
+```html
+<input type="text" required #nameInput2="ngModel" [(ngModel)]="person.name" >
+<p *ngIf="(person.name).toLowerCase()==='david' && person.age>=18; else myblock_else_simple">estas en el if - Soy David </p>
+
+<ng-template #myblock_else_simple>
+  <p>estas en el else - eres otra persona</p>
+</ng-template>
+```
+
+El ngIf tiene la alternativa de poner un `else` pero no del `else if` para hacer un else if hay q hacerlo así:
+
+```html
+
+<p *ngIf="person.name==='pedro'; else myblock_else_if_block ">Hola Pedro</p>
+
+<ng-template #myblock_else_if_block >
+  <p *ngIf="(person.name).toLowerCase()==='marc'; else myblock_else">estas en el else if - Soy Marc</p>
+</ng-template>
+
+<ng-template #myblock_else>
+  <p>estas en el else - eres un desconocido</p>
+
+</ng-template>
+```
+
+Otra manera de hacer un ngIf es usando ng-container
+
+```html 
+<ng-container *ngIf="1==1" >
+  <p> esto está dentro de un ng-container</p>
+
+</ng-container>
+```
+
+#### ngFor 
+
+Permite iuterar un array. 
+
+en primer lugar en nuestro archivo `app.component.ts` tenemos que tener un array declarado.
+
+```javascript
+ names: string[] = ['david', 'marc', 'julian'];
+```
+
+y en el html lo iteramos 
+
+```html 
+
+<h1>ngFor</h1>
+
+<ul>
+  <li *ngFor="let name of names; index as i">
+    {{i}} => {{name}}
+  </li>
+</ul>
 ```
