@@ -1,0 +1,125 @@
+<div class="container">
+  <app-header></app-header>
+</div>
+
+<!-- ngIf -->
+
+<h1> *ngIf</h1>
+
+<input type="text" required #nameInput2="ngModel" [(ngModel)]="person.name">
+<p *ngIf="(person.name).toLowerCase()==='david' && person.age>=18; else myblock_else_simple">estas en el if - Soy David
+</p>
+
+<ng-template #myblock_else_simple>
+  <p>estas en el else - eres otra persona</p>
+</ng-template>
+
+<!-- ngIf con else if -->
+
+<p *ngIf="person.name==='pedro'; else myblock_else_if_block ">Hola Pedro</p>
+
+<ng-template #myblock_else_if_block>
+  <p *ngIf="(person.name).toLowerCase()==='marc'; else myblock_else">estas en el else if - Soy Marc</p>
+</ng-template>
+
+<ng-template #myblock_else>
+  <p>estas en el else - eres un desconocido</p>
+
+</ng-template>
+
+<ng-container *ngIf="1==1">
+  <p> esto está dentro de un ng-container</p>
+
+</ng-container>
+
+<!-- ngIf -->
+
+<!-- ngFor -->
+
+<h1>ngFor</h1>
+
+<ul>
+  <li *ngFor="let name of names; index as i">
+    {{i}} => {{name}}
+  </li>
+</ul>
+
+<!-- ngFor -->
+
+
+<!-- ngModel -->
+
+<h1>ngModel</h1>
+
+<p>Nombre:{{person.name}}</p>
+<p>Edad:{{person.age}}</p>
+
+<input type="text" #nameInput="ngModel" [(ngModel)]="person.name" required> <br>
+<input type="number" max="18" min="10" #ageInput="ngModel" [(ngModel)]="person.age" required>
+
+<p>Valid: {{nameInput.valid }}</p>
+<p>Valid: {{ageInput.valid }}</p>
+<!-- ngModel -->
+<hr>
+<!-- event binding -->
+<h1>event binding</h1>
+
+<h2>click event </h2>
+
+<button [disabled]="btnDisabled">Enviar</button><br><br>
+<button (click)="toggleBtn()">Toggle Buton</button>
+<p>{{person.age}}</p>
+
+<button (click)="age_plus()">age++</button>
+
+<hr>
+<hr>
+
+<h2>scroll event </h2>
+<div class="box" (scroll)="miScroll($event)">
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, id, debitis numquam provident unde exercitationem
+    recusandae laboriosam nesciunt modi ipsam optio, ullam quae fugiat molestias nulla deserunt maxime corporis quam.
+    Hic debitis beatae rerum, maiores dignissimos praesentium illo repudiandae velit quos a ipsam, quas voluptatem! Nemo
+    perferendis repellat similique hic! Voluptatum aliquam modi totam quas officiis sint adipisci quod ipsam.
+    Minus molestiae vero id numquam dolores, magnam labore aspernatur deleniti odio voluptatibus hic. Tempora debitis
+    rem tempore, quasi quis fugit accusantium veritatis omnis reiciendis aliquam amet exercitationem, recusandae, velit
+    quisquam!</p>
+</div>
+<hr>
+<hr>
+<h2>keyup event </h2>
+
+<p>tu nombre:{{person.name}}</p>
+<input type="text" (keyup)="myKeyup($event)">
+<!-- event binding -->
+<hr>
+<!-- data binding -->
+<h1>data binding </h1>
+
+<h1>Propiedades</h1>
+
+<button [disabled]="btnDisabled">Enviar</button><br><br>
+<input type="text" [value]="name">
+<progress max="100" [value]="age"></progress>
+<img [src]="img" width="100">+
+
+<br><br>
+<input type="text" [value]="person.name">
+<progress max="100" [value]="person.age"></progress>
+<img [src]="person.avatar" width="100">
+<!-- data binding -->
+
+
+<hr>
+<hr>
+<h1>Hello world</h1>
+<h2>{{ 'Hola dmv'.repeat(2) }}</h2>
+
+<h3>3+3={{3+3}}</h3>
+
+<h3>Hola! soy {{name}} y tengo {{age}} años</h3>
+
+<img src="{{img}}" alt="">
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.1.1/css/all.min.css"></script>
+<hr>

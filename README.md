@@ -1,3 +1,26 @@
+- [Angular crash course](#angular-crash-course)
+  - [What is angular?](#what-is-angular)
+    - [Angular Services](#angular-services)
+    - [Angular CLI](#angular-cli)
+  - [Why angular?](#why-angular)
+  - [Creating Angular app](#creating-angular-app)
+    - [Estructura del proyecto](#estructura-del-proyecto)
+    - [Crear un nuevo componente utilizando angular/cli](#crear-un-nuevo-componente-utilizando-angularcli)
+    - [Conceptos básicos de TS](#conceptos-básicos-de-ts)
+    - [Componentes de angular](#componentes-de-angular)
+    - [Decorator @Input()](#decorator-input)
+    - [Decorator @Output()](#decorator-output)
+    - [Directives](#directives)
+      - [ngStyle](#ngstyle)
+    - [String Interpolation](#string-interpolation)
+    - [Property Binding](#property-binding)
+    - [Event Binding](#event-binding)
+    - [Data Binding](#data-binding)
+      - [Custom Validators](#custom-validators)
+    - [Directivas de control](#directivas-de-control)
+      - [ngIf](#ngif)
+      - [ngFor](#ngfor)
+
 # Angular crash course
 
 ## What is angular?
@@ -46,7 +69,6 @@ It will allow us create:
 - angular apps (`ng new my-angular-app`)
 - Dev server and easy productions build 
 - Commands to generate components, services,...
-
 
 ## Why angular?
 
@@ -207,7 +229,38 @@ const dmv2 = new Persona(37, 'dmv');
 Angular divide las responsabilidades del componente como hemos visto antes. 
 La lógica se escibe en TS y el render lo hace el archivo html.
 
-El component .ts tiene un decorator que le dice que html está ligado qué selector (tag) usará y q archivo de styling 
+la estructura de un componente vacío es 
+
+```javascript
+
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-header',
+  templateUrl: './header.component.html',
+  styleUrls: ['./header.component.css']
+})
+export class HeaderComponent implements OnInit {
+
+  constructor() { }
+
+  ngOnInit(): void {
+  }
+
+}
+```
+
+Hay un par de cosas a destacar :
+
+- **CONSTRUCTOR** 
+
+Funciona cuando inicializamos un nuevo objeto en este caso un nuevo comopnente. 
+
+- **ngOnInit()**
+
+Es un método para el ciclo de vida del componente. Es el método que usaremos habitualmente cuando inicialicemos nuetsro código por ejemplo si queremos indicar cuándo se carga nuestro componente lo indicaríamos en este método o si queremos hacer una petición `http` también iría en este método. 
+
+El component .ts tiene un decorator que le dice qué html está ligado qué selector (tag) usará y qué archivo de styling 
 
 ```javascript
 import { Component } from '@angular/core';
@@ -252,6 +305,134 @@ Como vemos en decorator el selector apunta a `app-root` esto o que hace es meter
 ```
 
 Una cosa importante a tener en cuenta que las variables declaradas deben tener acceso público, si las declaro como privadas el html del componente no puede acceder. Por defecto es público no hace falta especificar `public`
+
+### Decorator @Input()
+
+Esto nos permite enviar props (propiedades desde la tag del componente al component.ts) Desde el componente madre donde se encuentra el tag de nuestro componet.
+
+```html
+<!--  ******* header component ******  -->
+<header>
+    <h1>{{ title}}</h1>
+    <app-button color="green" text="Add2"></app-button>
+</header>
+
+```
+Añado propiedades al tag de mi componente y las recibo en el component.ts. Para ello debo utulizar el decorador `@Input`
+
+```javascript
+import { Component, OnInit, Input } from '@angular/core';
+export class ButtonComponent implements OnInit {
+
+  @Input() text: string
+  @Input() color!: string
+
+  constructor() {
+
+    this.text = 'Add'
+
+  }
+
+  ngOnInit(): void {
+  }
+
+}
+
+```
+TS se asegura siempre que esa propiedad exista, entonces puede ser q desde el tag no enviemos la propiedad `text` por eso nos obliga a hacer una de las dos cosas siguientes: 
+
+1. añadimos al final del nombre de la variable un signo de admiraicón `!` esto indica a TS q **seguro** enviaremos esa propiedad  (lo q hago con color), la otra opción es ponerle un interrogante `?` indicando q esa propiedad será opcional 
+   
+```javascript
+  @Input() color?: string
+
+```
+
+
+1. Inicializo esa variable en el constructor, con un valor por defecto y en caso q desde el tag del componente no le envie la propiedad utilizará este valor por defecto
+
+La estrategia de esto es q puedo tener un componente button que según las props que le pase puedo modificarlo ligeramente, en mi caso le paso las props de texto y color del button
+
+### Decorator @Output()
+
+Este decorador nos servirá para que nuestro componente (en nuestro caso un button) emita un evento. Este evento podrá ser capturado por otro componente por ejemplo el componente madre header
+
+Tenemos q importar Output y EventEmitter 
+
+```html
+<button 
+  (click)="onClick($event)"
+  [ngStyle]="{ 'background-color': color }"
+  class="btn"
+  >
+    {{text}}
+</button>
+
+```
+Añadimos un evento `click` a nuestro botón y cuando se active ejecute la función `onClick` que ésta a su vez lanzará un evento propio llamado `btnClick`. Para poder emitir ese evento usamos `@Output` para inicializar una variable `btnClick` q será un `EventEmitter`.
+
+
+```javascript
+import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core';
+
+export class ButtonComponent implements OnInit {
+
+  @Input() text: string
+  @Input() color!: string
+
+  @Output() btnClick = new EventEmitter(); // el evento
+
+  constructor() {this.text = 'Add'}
+
+  ngOnInit(): void {}
+
+  onClick(event: Event) {
+    
+    event.preventDefault()
+
+    this.btnClick.emit()
+
+  }
+
+}
+
+```
+
+Ese evento emitido será capturado en el componente madre (header) para ello 
+```html
+<header>
+    <h1>{{ title}}</h1>
+    <app-button 
+      color="green"
+      text="Add2"
+      (btnClick)="toggleAddTask()">
+    </app-button>
+</header>
+
+```
+
+
+
+
+### Directives
+
+#### ngStyle
+
+Esta directiva la podemos agregar en un tag para modificar el css inline. En el ejemplo del botton le paso la props color para q este surja efecto debemos utilizar la directiva de ngStyle
+
+```html
+
+<button 
+  [ngStyle]="{ 'background-color': color }"
+  class="btn"
+  >
+   {{text}}
+</button>
+
+
+```
+
+
 
 ### String Interpolation 
 
@@ -377,6 +558,13 @@ export class AppComponent {
 ```
 
 2. scroll event
+
+```html
+<div class="box" (scroll)="miScroll($event)">
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Hic, id, debitis</p>
+</div>
+
+```
 
 ```javascript
 export class AppComponent {
@@ -543,7 +731,7 @@ Otra manera de hacer un ngIf es usando ng-container
 
 ```html 
 <ng-container *ngIf="1==1" >
-  <p> esto está dentro de un ng-container</p>
+  <p> esto está dentro de un ng-container</p> 
 
 </ng-container>
 ```
@@ -566,7 +754,7 @@ y en el html lo iteramos
 
 <ul>
   <li *ngFor="let name of names; index as i">
-    {{i}} => {{name}}
+    {{i}} => {{name}} 
   </li>
 </ul>
 ```
