@@ -1,5 +1,5 @@
 "use strict";
-// classes typescript
+// creating interface
 var __classPrivateFieldSet = (this && this.__classPrivateFieldSet) || function (receiver, state, value, kind, f) {
     if (kind === "m") throw new TypeError("Private method is not writable");
     if (kind === "a" && !f) throw new TypeError("Private accessor was defined without a setter");
@@ -11,36 +11,13 @@ var __classPrivateFieldGet = (this && this.__classPrivateFieldGet) || function (
     if (typeof state === "function" ? receiver !== state || !f : !state.has(receiver)) throw new TypeError("Cannot read private member from an object whose class did not declare it");
     return kind === "m" ? f : kind === "a" ? f.call(receiver) : f ? f.value : state.get(receiver);
 };
-var _Employee2_id;
-// con el contructor por defecto, no hace falta especificarlo
-// pero entonces nos saldrá un error para evitarlo después del nombre de la property
-// debemos añadir un !
-class Employee {
-}
-let emp = new Employee();
-emp.id = 1;
-emp.name = 'david';
-emp.address = 'one';
-console.log(emp);
-// Employee { id: 1, name: 'david', address: 'one' }
-/**
- * si usamos constructores, q son los responsables de crear una instacia
- * de nuestra clase. Hay dos tipos de contructores:
- *
- * 1. contructor por default
- * 2. constructor parametrizado (hecho por nosotros)
- *
- *
- *
- */
-// constructor parametrizado
-// cuando hagamos el new debemos pasarle los propeties
-class Employee2 {
+var _Employee3_id, _Employee6_id;
+class Employee3 {
     constructor(id, name, address) {
         // properties
         // private properties use #
-        _Employee2_id.set(this, void 0);
-        __classPrivateFieldSet(this, _Employee2_id, id, "f");
+        _Employee3_id.set(this, void 0);
+        __classPrivateFieldSet(this, _Employee3_id, id, "f");
         this.name = name;
         this.address = address;
         Employee2.count += 1;
@@ -56,20 +33,32 @@ class Employee2 {
     }
     // getters and setters
     get empId() {
-        return __classPrivateFieldGet(this, _Employee2_id, "f");
+        return __classPrivateFieldGet(this, _Employee3_id, "f");
     }
     set empId(id) {
-        __classPrivateFieldSet(this, _Employee2_id, id, "f");
+        __classPrivateFieldSet(this, _Employee3_id, id, "f");
     }
 }
-_Employee2_id = new WeakMap();
-class Manager extends Employee2 {
+_Employee3_id = new WeakMap();
+let jonh = new Employee3(1, 'David', {
+    street: 'street1',
+    city: 'city1',
+    state: 'state1',
+    pin: 'pin1'
+});
+let user = { name: 'David', id: 1, email: 'mail1' };
+let user2 = { name: 'David', id: 1, email: 'mail1', salary: 5000 };
+class Employee6 {
     constructor(id, name, address) {
-        super(id, name, address);
+        _Employee6_id.set(this, void 0);
+        __classPrivateFieldSet(this, _Employee6_id, id, "f");
+        this.name = name;
+        this.address = address;
+        Employee2.count += 1;
+    }
+    login() {
+        let user1 = { name: 'David', id: 1, email: 'mail1' };
+        return user1;
     }
 }
-let emp2 = new Employee2(2, 'dav', 'a');
-let manager = new Manager(2, 'dav', 'a');
-// getters and setters
-emp2.empId = 200;
-console.log(emp2.empId);
+_Employee6_id = new WeakMap();
