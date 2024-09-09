@@ -2,7 +2,33 @@
   - [Intro](#intro)
     - [SPA - Single Page Application](#spa---single-page-application)
       - [SPA y Angular](#spa-y-angular)
-  - [Intro to TypeScript](#intro-to-typescript)
+  - [Primera app angular](#primera-app-angular)
+  - [Arquitectura de una app Angular](#arquitectura-de-una-app-angular)
+    - [Modulos](#modulos)
+    - [Componentes](#componentes)
+  - [Creando nuestro primer componente](#creando-nuestro-primer-componente)
+  - [Data binding (enlace de datos)](#data-binding-enlace-de-datos)
+  - [Envío de datos entre los componentes](#envío-de-datos-entre-los-componentes)
+    - [Características principales](#características-principales)
+    - [Metadata](#metadata)
+    - [INPUT](#input)
+    - [OUTPUT y EventEmitter](#output-y-eventemitter)
+  - [Servicios](#servicios)
+    - [Caracteristivas](#caracteristivas)
+    - [Servicios y dependencias](#servicios-y-dependencias)
+  - [Directivas](#directivas)
+    - [Caracteristicas](#caracteristicas)
+  - [PIPES](#pipes)
+    - [Agregar bootstrap en Angular.](#agregar-bootstrap-en-angular)
+  - [Routing o Enrutamiento](#routing-o-enrutamiento)
+  - [Estructuras de Control](#estructuras-de-control)
+    - [ngIf](#ngif)
+    - [ngFor](#ngfor)
+    - [ngSwitch](#ngswitch)
+    - [ngClass](#ngclass)
+    - [ngStyle](#ngstyle)
+    - [ngContainer](#ngcontainer)
+- [Intro to TypeScript](#intro-to-typescript)
     - [crear TS app](#crear-ts-app)
     - [Data types](#data-types)
     - [Functions](#functions)
@@ -23,15 +49,15 @@
     - [Decorator @Input()](#decorator-input)
     - [Decorator @Output()](#decorator-output)
     - [Directives](#directives)
-      - [ngStyle](#ngstyle)
+      - [ngStyle](#ngstyle-1)
     - [String Interpolation](#string-interpolation)
     - [Property Binding](#property-binding)
     - [Event Binding](#event-binding)
     - [Data Binding](#data-binding)
       - [Custom Validators](#custom-validators)
     - [Directivas de control](#directivas-de-control)
-      - [ngIf](#ngif)
-      - [ngFor](#ngfor)
+      - [ngIf](#ngif-1)
+      - [ngFor](#ngfor-1)
 
 
 
@@ -43,7 +69,7 @@ source: https://www.youtube.com/watch?v=3qBXWUpoPHo&t=26s
 ## Intro
 
 Tenemos:
- AngularJS (hecho con puro JS)
+ AngularJS (hecho con puro JS) obsoleto
  Angular (hecho con TypeScript)
 
 ### SPA - Single Page Application
@@ -52,9 +78,745 @@ Los importante de las SPA es que hay una única request en la que se manda todo 
 
 #### SPA y Angular
 
-Angular tiene un módulo llamado `routing` para crear SPAs que nos permitirá acceder a diferentes end-points para recuperar los datos que necesitamos.
+Angular es un framework especializado en crear aplicaciones SPA. Angular tiene un módulo llamado `routing` para crear SPAs que nos permitirá acceder a diferentes end-points para recuperar los datos que necesitamos. Sigue el sistema MVC (modelo vista controlador).
+El modelo es una clase TypeScript.
 
-## Intro to TypeScript
+Angular CLI (Angular Command Line interface) nos permite crear, desarrollar y administrar las aplicaciones de Angular
+
+Para instalar el Angular cli hacemos:
+
+```
+npm install --global @angular/cli // instala la última version
+
+npm uninstall -g @angular/cli// desinstala todas las versiones de anular cli que tengamos instaladas
+
+npm i -g @angular/cli@16.2.10
+
+```
+
+## Primera app angular
+
+```
+ng new curso-angular-youtube
+```
+esto crea toda la estructura de carpetas de angular. Nos pregunta si queremos usar el `routing` de angular => le damos q sí y podremos escoger como sera los estilos (css, less, ...)
+
+En el directorio `src` tenemos los directorios
+- app 
+  - routing
+  - components
+  - module
+- assets (archivos static)
+- index.html
+- main.ts
+- styke.css
+
+
+
+
+## Arquitectura de una app Angular
+
+![not found](img/4.png)
+
+### Modulos
+
+Es un mecanismo de organizacion y encapsulamineto que se utiliza para agrupar componentes,directivas, pipes(filtros),serviciosy otros elementos relacoinados en una unidad funcionalcoherente. Ayudan a dividir una aplicacoin en partes pequeñas y manejables, lo q facilita el desarrollo, la nabtenibilidad y la escalabilidad.
+
+Los modulos siguen una organizacion jerarquica, el modulo principal pasa datos a los modulos q tiene por debajo y así, una esctructura en árbol. Por ejemplpo tenemos el modulo principal, despues tenemos un modulo pequeñito de login, el modulo q controla la cuenta corriente, el q gestiona las cryptos,... 
+
+los modulo es una manera de organizar la app, no son elementos visuales, no se ven en el front. No son como los componentes, lo componentes se pintan en la pantalla, son elementos q se ven.
+
+Para hacer un modulo nuevo:
+
+```
+ng generate module nombre-del-modulo
+
+ng g m nombre-del-modulo
+```
+asi luce un modulo
+
+```js
+import { NgModule } from '@angular/core'; // importanmos el decorador para luego indicar q es un modulo
+import { BrowserModule } from '@angular/platform-browser'; // modulo propio de angular
+
+import { AppRoutingModule } from './app-routing.module'; // modulo propio de angular
+import { AppComponent } from './app.component'; // un componente
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule
+  ],
+  providers: [], 
+  exports:[],
+  bootstrap: [AppComponent] // no es la libreria XD es un atributo q angular lo llamo bootstrap y es dnd especificamos el componente principal de la app
+})
+export class AppModule { }
+
+```
+los modulos q ponenmos en el imports nos permitiran ampliar las funcionalidades de modulo q estoy creando
+
+### Componentes
+
+Es un bloque fundamental de construccion para la creacion de interfaces de usuario (UI) es una webapp.Los componentes son responsables de definir como se ve y se comporta una parte especifica de la interfaz de usuario. Xada componente representa un elemento visual o funcional de la web, como un encabezado, un pie de pagina, un formulario, una lista de elementos,...
+
+Nos permite diseñar atomicamente, es decir creamos un componente q lo podremos reutilizar en distintos lugares de la app, son como ladrillitos para construir la parte visual de la app que tb le da funcionalidad, es decir definen vistas y logica.Son reactivos y se basan en TypeScript para hacer la logica y la vista se construye con html.
+Se organizan en jerarquia.
+
+para crear un componente
+
+```
+ng generate component nombre-del-component
+
+ng g c nombre-del-componente
+```
+
+El componente se compone de 4 archivos (3 obligatorios):
+
+- archivo del comonente (el controlador, es una clase TypeScript) => nombre-del-componente.component.ts
+-  archivo html (es la plantilla, la vista) => nombre-del-componente.component.html
+-  archivo css (estilos de la vista) => nombre-del-componente.component.css
+-  archivo para hacer tests => nombre-del-componente.component.specs.ts (NO ES OBLIGATORIO)
+
+```js
+import { Component, OnInit } from '@angular/core';
+
+@Component({
+  selector: 'app-root', // el nombre q le damos al componente
+  templateUrl: './app.component.html', // dnd se encuentra el html para ese componente
+  styleUrls: ['./app.component.css'] // dnd encontramos los distintos estilos q puede tener el html
+})
+export class AppComponent implements OnInit {
+
+  // propiedades del comopnente
+  title:string = 'curso-angular-youtube';
+
+  constructor(){}
+
+  // metodos 
+
+  ngOnInit():void{
+    
+  }
+}
+
+```
+con la notacion de " {{ }} " nos permite renderizar en la vista una variable de manera dinamica
+```html
+
+<div>
+  <h1>{{ title }}</h1>
+  <p> Esta parte del html es estatico</p>
+</div>
+```
+archivo de estilos
+
+```css
+
+div{
+
+color:blue;
+}
+
+p{
+  color:red;
+}
+```
+Este componente `app-root` lo podremos insertar en el index.html para q se renderice.
+
+![not found](img/5.png)
+
+
+## Creando nuestro primer componente
+
+1. creamos el componente por comando
+```
+ng g c componente-padre
+```
+
+2. esto crea una carpeta del mismo nombre q el componente con los siguientes archivos
+
+![not found](img/6.png)
+
+3. en cuanto creamos el componente este se añade al modulo principal (app.module) directamente
+
+![not found](img/7.png)
+
+
+4. este componente padre vive dentro del componente principal q es `app.complonent.ts ` por lo q el nuevo componente lo tenemos q llamar dentro del html de este utilizando el selector de su archivo .ts
+
+![not found](img/8.png)
+
+![not found](img/9.png)
+
+
+## Data binding (enlace de datos)
+
+Es la capacidad de conectar y sincronizar automaticamente los datos entre el modelo (estado de la aplicacion) y la vista (interfaz de usuario) Esto permite q los cambios en el modelo se reflejen automaticamente en la vista y viceversa.
+
+Por ejemplo
+
+en mi clase TS
+
+```js
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'app-contador',
+  templateUrl: './contador.component.html',
+  styleUrls: ['./contador.component.css']
+})
+export class ContadorComponent {
+
+  valorContador : number = 0;
+
+  incrementar(){
+    this.valorContador++
+  }
+
+  decrementar(){
+    this.valorContador--
+  }
+
+}
+```
+
+en mi html 
+
+```html
+<p>contador works!</p>
+
+<h1>{{valorContador }}</h1>
+
+<button (click)="incrementar()" >Incrementar</button>
+<button (click)="decrementar()" >Decrementar</button>
+
+```
+
+esto me permite tener un contador  q sin actualizar la pantalla me actualice el valor del contador cuando hago click sobre el boton.
+
+## Envío de datos entre los componentes
+
+Un componente puede enviar datos hacia arriba (componente q lo contiene) o hacia abajo (componente/s q contien)
+
+Se pueden comunicar a traves de las input/output properties. Un componente hijo puede llevar datos al padre mediante q generacion de un evento y el padre puede pasar datos al hijo mediante input data binding.
+
+### Características principales
+
+- conexión automática: sincroniza datos entre modelo y l avista
+- unidireccional: los cambios en el modelo se reflejan en la vista
+- bidireccional: los cambios en la vista se reflejan en el modelo
+- reactivo: utiliza **observable** para actualizaciones en tiempo real
+- simplifica interacciones
+- automatiza actualizaciones
+
+Hay distintos modos de pasar datos entre controlador(component.ts) y l vista (component.html)
+
+1. del controlador a la vista
+   1. usando notacion {{value}}
+   2. usando propiedades clave-valor ([property]='value)
+2. de la vista al controlador
+   1. Usando eventos (event => handler)
+3. intercambio vidireccional
+   1. usando ng-models ([(ng-model)] = 'property')
+
+![not found](img/10.png)
+
+
+### Metadata
+
+Se refiere a la información adicional que se proporciona mediante `decoradores` en las clases q definen componentes,módulos, servicos y otras parates de la app, se utilizar para `configurar` y `personalizar` el comportamiento de estos elementos.
+
+por ejemplo el contenido del objeto q le pasamos a `@Component` es la metadata.
+
+```javascript
+@Component({
+  selector: 'app-contador',
+  templateUrl: './contador.component.html',
+  styleUrls: ['./contador.component.css']
+})
+```
+
+
+### INPUT 
+
+1. en el **componente hijo**, se puede definir propiedades de entrada utilizando el decorador ` @input()` son datos q envía el componente padre y el hijo los captura.
+```javascript
+// componente hijo ().component.ts)
+
+@Input() datoEntrada: string;
+```
+
+2. En el **componente padre** puedes vincular datos a la propiedad de entrada del componente hijoutilizando sintaxis de corchetes [] en el marcado del template
+
+```html
+<!-- componente padre (html)-->
+
+<app-hijo [datoEntrada]='valorDesdePadre'></app-hijo>
+
+```
+
+3. si los datos del componente padre q envía al hijo cambian esto se actualiza directamente en el hijo
+
+```javascript
+// componente padre
+
+valorDesdePadre = 'Hola mundo!';
+```
+4. finalmente, esa propiedad q viaje del padre al hijo puede ser usada en el hijo comom queramos (usarla en la logica, renderizarla en la plantilla, etc...)
+
+```html
+
+<!-- componente hijo template -->
+
+<p> {{ datoEntrada }}</p>
+```
+
+### OUTPUT y EventEmitter
+
+1. se utiliza para conseguir la comunicacion entre un componente hijo y su padre, para ello se declara una propiedad con el decorador `@output` en el componente hijo
+
+```javascript
+
+//componente hijo
+import { Output,EventEmitter} from '@angular/core';
+@output() messageEvent = new EventEmitter<string>();
+
+message: string = '';
+
+sendMessage(){
+  this.messageEvent.emit(this.message);
+}
+
+```
+hay q importar forms en el `app.module.ts` ya que para usar `ngModel` y vincular esa propiedad cn el valor de un input necesitamos tratarlo como un formulario.
+
+```javascript
+
+import { FormsModule} from '@angular/forms';
+
+@NgModule({
+  declarations: [
+    AppComponent,
+    PadreComponent,
+    HijoComponent,
+    ContadorComponent,
+    OutputsComponent,
+    OutputsPadreComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    FormsModule
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+```
+2. en el html del hijo se utiliza `ngModel` para vincular datos de esta vista con la propiedad del ts en este caso `message`.
+
+```html
+
+<!-- componente hijo template -->
+
+<div>
+  <label for='childInput'>Mensaje:</label>
+  <input id='childInput' [(ngModel)]='message'/>
+  <button (click)='sendMessage()'>enviar mensaje</button>
+
+</div>
+
+```
+
+3. en el ts del padre definimos una propiedad q es la q recibira el valor q emitimos desde el hijo y una vez  capturado  este evento q dispara una funcion q actualiza este valor
+
+```javascript
+
+// component ts del padre 
+
+export class OutputsPadreComponent {
+
+  receivedMEssage : string = '';
+
+  receiveMessage(message:string){
+    this.receivedMEssage = message
+  }
+
+}
+
+``` 
+4. finalmente en el template del padre cargamos el hijo y escuchamos el evento q emite el hijo para capturarlo y ejecutar la funcion del padre
+
+```html
+
+<p>child says: {{ receivedMEssage}}</p>
+
+<app-outputs  (messageEvent)=receiveMessage($event) />
+```
+
+## Servicios
+
+### Caracteristivas
+
+  1. Reutilizacoin: logica compartida
+  2. Separacion de preocupaciones: divide logica y UI
+  3. Inyeccion de dependencias: instancias proporcionxadas
+  4. Centralizacion de datos: alamcena y gestiona datos compartidos (prescindiendo de un backend, podemos guardar los datos en un servicio para poderla pasar entre componentes)
+  5. comunicacion entre componentes
+  6. lifecycle independiente: no vinculado a vistas
+  7. testeabilidad: facil de probar
+
+Es una clase de TypeScript que se utilizan para organizar y compartir lógica, datos o funcionalidades comunes entre diferentes componentes. Permite centralizar y reutilizar logica q no esta directamente relacionada con la interfaz de usuario.
+
+Para asi decirlo es un modo de compartir una lógica concreta entre distintos componentes, (evita repetir lógica)
+
+Los servicios se inyectan en los componentes.
+
+para generar un servicio desde el angular-cli
+
+```
+ng g s nombre_servicio
+```
+y se utiliza el decorator ` @Injectable` 
+
+son utilies xq ejemplo para "persistir" los datos del usuario entre pantallas de la applicacion, podemos poder nombre, direccion, etc etc del usuario en un servicio 
+
+### Servicios y dependencias
+
+Las dependencias son los recursos externos y modulos de codigo q una app necesita para funcionar correctamente. Estos recursos pueden incluir bibliotecas externas, modulos angular, servicios personalizados, componentes,...
+Las dependencias en angular se gestionan a través del sistema de inyeccion de dependencias.
+
+Para inyectar un servicio antes de Angular 16 se hacia como parámetro en el constructor
+
+```js
+import { Component } from '@angular/core';
+import { ServicioFamiliarService } from '../servicio-familiar.service';
+
+@Component({
+  selector: 'app-padre',
+  templateUrl: './padre.component.html',
+  styleUrls: ['./padre.component.css']
+})
+export class PadreComponent {
+
+  constructor(private service: ServicioFamiliarService){}
+
+}
+```
+
+a partir de angular 15 se hace asi, usando ` inject`
+
+```javascript
+@Component({
+  selector: 'app-hermano',
+  templateUrl: './hermano.component.html',
+  styleUrls: ['./hermano.component.css']
+})
+export class HermanoComponent implements OnInit{
+  
+  nombre?:string;
+
+  constructor(){}
+  
+
+  private service = inject(ServicioFamiliarService)
+
+}
+```
+este es el servicio
+
+```js
+import { Injectable } from '@angular/core';
+
+@Injectable({
+  providedIn: 'root'
+})
+export class ServicioFamiliarService {
+
+  hermano_grande : string = 'Juan';
+  hermano_pequeno : string = 'Pedro';
+
+  saludar(hermano: string){
+    console.log(`Hola ${hermano}`)
+  }
+
+  preguntar_por_hijo():string{
+    return 'cómo esta tu hijo?'
+  }
+
+  constructor() { }
+}
+```
+
+
+## Directivas
+
+Son instrucciones en el marcado HTML que proporcionan funcionalidad adicional a los elementos DOM existentes o personalizan su comportamiento. Las directivas son un componente clave en la construccion de Angular web apps ya q permiten extender y manipular el DOM de manera declarativa, l q facilita la creacion de interfaces de usuario dinamicas e interactivas. Angular proporciona varias directivas incorporadas y también permite la creación de otras personalizadas. 
+
+### Caracteristicas
+
+1. Instrucciones HTML, extienden o personalizan elementos HTML
+2. Directivas incorporadas, ofrecen funcionalidades predefinidas
+3. Directivas estructurales, manipulan la estructura delDOM
+4. Directivas de atributos, cambian atributos y propiedades
+5. Directivas de eventos, capturan y responden a eventos de usuario
+6. Ditectivas personalizadas, creadas para necesidades especificas
+7. Flexibilidad de aplicación, se pueden aplicar como atributos o elementos
+
+creacion de directiva personalizada, las prehechas ya se cargan en el core de angular
+
+```
+ng g d nombre-directiva
+
+```
+
+para llamar a una directiva en nuestro HTML 
+
+```html
+
+<div miDirectiva>
+  este es un elemento  con mi directiva
+</dic>
+
+```
+
+las directivas se escriben asi
+
+```javascript
+import { Directive, ElementRef } from '@angular/core';
+
+@Directive({
+  selector: '[appEstiloHermanos]'
+})
+export class EstiloHermanosDirective {
+
+  constructor( private element : ElementRef) { 
+    this.element.nativeElement.style.textTransform = 'capitalize'
+
+
+  }
+}
+```
+
+Hemos puesto de ejemplo la mdificacion de estilos pero se puede utilizar xa muchas otras cosas mas
+
+
+## PIPES
+
+[link a las pipes de angular](https://angular.io/guide/pipes)
+
+Permite formatear y transformar datos en la vista de una aplicacion web de manera sencilla y legible, los pipes son funciones q toman un valor de entrada, por ejemplo un stirng, number, fechas,... y lo procesan para proporcionar una representacion formateada en la interfaz de usuario. Solo es visual! no modifica el dato original.
+
+Los PIPES se utilizan en los archivos HTML y se aplican utilizando la barra  ` | `
+
+Angular proporciona pipes integrados como DatePipe, UpperCasePipe, ...aunq tambien puedes crear tus propios pipes.
+
+para ello 
+
+```
+ng g p nombre-del-pipe
+```
+
+un pipe de ejemplo
+
+```javascript
+import { Pipe, PipeTransform } from '@angular/core';
+
+@Pipe({
+  name: 'miPipePersonalizado'
+})
+export class MiPipePersonalizadoPipe implements PipeTransform {
+
+  transform(value: string | undefined): string {
+    return value?.toUpperCase() || '';
+  }
+
+}
+```
+
+### Agregar bootstrap en Angular.
+
+Tenemos q instalar bootstrap con 
+
+```
+npm i bootstrap@5.3.2
+```
+
+y despues coger la ruta relativa del `bootstrap.min.css` y del `bootstrap.bundle.min.js` dentro de node_modelules>dist> y copiarlo en el archivo ` angular.json` en la seccion de `build`
+
+
+```javascript
+"build": {
+  "builder": "@angular-devkit/build-angular:browser",
+  "options": {
+    "outputPath": "dist/landing-page",
+    "index": "src/index.html",
+    "main": "src/main.ts",
+    "polyfills": [
+      "zone.js"
+    ],
+    "tsConfig": "tsconfig.app.json",
+    "assets": [
+      "src/favicon.ico",
+      "src/assets"
+    ],
+    "styles": [
+      "src/styles.css",
+      "node_modules/bootstrap/dist/css/bootstrap.min.css"
+    ],
+    "scripts": [
+      "node_modules/bootstrap/dist/js/bootstrap.bundle.min.js",
+      "node_modules/jquery/dist/jquery.min.js"
+
+      
+    ]
+```
+
+
+## Routing o Enrutamiento
+
+El enrutamiento en Angular se refiere a la capacidad de navegar entre diferentes componentes o vistas de una aplicacion web sin recargar la pagina completa. Permite crear SPA dnd los cambios en la url desencadenan la carga de diferentes componentes.
+
+Las rutas definen la correspondencia entre la URL y los componentes q deben cargarse cuando esa URL esta activa. Se configura en un array dentro del modulo de la app.
+
+```javascript
+const routes: Routes = [
+  {path: 'inicio', component: InicioComponent}
+]
+```
+La directiva ` router-outlet ` se utiliza en la plantilla para indicar el lugar dnd Angular debe cargar dinamicamente los componentes asociados a las rutas. Puede haber un router-outlet en cada modulo.
+
+Para navegar podemos utilizar directiva routerLink en links ` <a routerLink='/inicio'>Inicio</a>, botones o programaticamente usando el servicio router de angular. Podemos enviar propiedades junto con el link 
+
+```javascript
+{path: 'producto/:id', component: DetalleProductoComponent}
+
+<a [routerLink]="[ '/producto', producto.id]">Ver detalles</a>
+```
+antes habia la opción de ` routerLinkActive` , servia para activar la opcion del menu al enrutar con angular, mediante la asociacion con una clase css. Aunq actualmente se utiliza la directiva `ngClass`
+
+Para pasar mas de un parametro por URL para ello:
+
+```javascript
+// app-routing.module.ts
+{path: 'producto/:categoria/:id', component: DetalleProductoComponent}
+// xxx.componen.html
+<a [routerLink]="[ '/producto', producto.categoria, producto.id]">Ver detalles</a>
+
+```
+
+para capturar ambos parametros en el .TS `ActivatedRoute` o ` Router`.
+
+```javascript
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+
+@Component({
+  selector: 'app-products-detail',
+  templateUrl: './products-detail.component.html',
+  styleUrls: ['./products-detail.component.css']
+})
+export class ProductsDetailComponent implements OnInit{
+
+  product: string = '';
+  color:string='';
+
+  constructor( private _route: ActivatedRoute){}
+
+  ngOnInit(): void {
+    this._route.params.subscribe(params => {
+      this.product = params['productId'];
+      this.color = params['style'];
+      
+    })
+  }
+
+}
+
+
+}
+
+```
+
+y en la vista podemos pintar los datos del siguiente modo
+
+```html
+<h1>Detalle del producto</h1>
+<h3 [ngStyle]="{'color': color}">{{product}}</h3>
+```
+## Estructuras de Control
+
+Son herramientas que te permiten manipular el flujo de ejecucion en tu aplicacion.
+
+Hay varios tipos
+
+### ngIf
+
+permite mostrar u ocultar un elemento en funcion de una expresion booleana
+
+```javascript
+<div *ngIf="mostrarElemento">
+    contenido se hace visible si mostrarElemento se resuelve como true
+</div>
+```
+
+### ngFor
+
+obviamente iterar sobre una lista
+
+```javascript
+<ul>
+    <li *ngFor="let item of items">
+        {{item}}
+    </li>
+</ul>
+```
+### ngSwitch
+
+```javascript
+<div [ngSwitch]="option">
+    <p *ngSwitchCase="'option1'"></p>
+    <p *ngSwitchCase="'option2'"></p>
+    <p *ngSwitchCase="'option3'"></p>
+    <p *ngSwitchDefault> Contenido por defecto </p>
+</div>
+```
+
+### ngClass
+
+Permite cambiar dinamicamente las clases de un elemento
+
+```javascript
+  <div [ngClass]="{'class1': condicion1, 'class2': condicion2}">
+    contenido con clase dinamica
+  </div>
+```
+### ngStyle
+
+Permite cambiar dinamicamnete los estilos de un elemento
+
+```javascript
+<div [ngStyle]="{'property': expression}"></div>
+```
+
+### ngContainer
+
+Es una estructura de control q no afecta al DOM, se utiliza para agrupar elementos sin agregar nodos adicionales al arbil DOM
+
+```javascript
+  <ng-container *ngIf="expression">
+    contenido q no afecta al DOM directamente
+  </ng-container>
+  
+```
+
+
+# Intro to TypeScript
 
 - Es un lenguaje fuertemente tipado, necesitas declarar qué tipo de dato contendrá la variable
 
