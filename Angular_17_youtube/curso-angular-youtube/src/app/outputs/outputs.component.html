@@ -1,0 +1,9 @@
+<p>outputs works!</p>
+<p>{{mensaje_recibido_del_padre}}</p>
+
+<div>
+    <label for='childInput'>Mensaje:</label>
+    <input id='childInput' [(ngModel)]='message'/>
+    <button (click)='sendMessage()'>enviar mensaje</button>
+  
+  </div>
