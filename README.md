@@ -27,15 +27,15 @@
   - [Primera app angular](#primera-app-angular)
   - [Arquitectura de una app Angular](#arquitectura-de-una-app-angular)
     - [Modulos](#modulos)
-    - [Componentes](#componentes)
+    - [Componentes](#componentes-1)
   - [Creando nuestro primer componente](#creando-nuestro-primer-componente)
   - [Data binding (enlace de datos)](#data-binding-enlace-de-datos)
   - [Envío de datos entre los componentes](#envío-de-datos-entre-los-componentes)
     - [Características principales](#características-principales)
     - [Metadata](#metadata)
-    - [INPUT](#input)
+    - [INPUT](#input-1)
     - [OUTPUT y EventEmitter](#output-y-eventemitter)
-  - [Servicios](#servicios)
+  - [Servicios](#servicios-1)
     - [Caracteristivas](#caracteristivas)
     - [Servicios y dependencias](#servicios-y-dependencias)
   - [Directivas](#directivas)
@@ -179,7 +179,7 @@ Tenemos que ir con cuidado con las exportaciones/importaciones q los archivos q 
 4. Servicios => son lugares centralizados de información donde se controla el estado de los componentes. Tb si tenemos botones x ejemplo llaman tb a servicios.
 5. Modulos => permite agrupar todos los componentes anteriores (componentes, rutas, directivas y servicios) inclusive pueden albergar otros módulos.
 
-![not found](img/2.png)
+![not found](img/2-1.png)
 
 incluso hay paquetes disponibles para usarlos en tu aplicación, por ejemplo hay modulos que te muestran calendatios, o módulos para formularios, etc... con el objetivo de no volver a crear algo q ya esta hecho, simplemente reutilizarlo.
 
@@ -208,7 +208,7 @@ ng new <nombre de la aplicación> --no-standalone
 
 3. cuando hacemos esto creamos localmente un `node_modules` y `package.json` pertenecientes al cli de angular 
 
-![not found](img/3.png)
+![not found](img/3-1.png)
 
 4. creamos nuestro proyecto. Ahora trabajaremos como en las versiones anteriores a la 17 de angular, cuando se usaban los modulos. Recordemos q a partir de la v17 de angular no se trabaja con modulos.
    Para iniciar un proyecto q sea compatible con modulos usaremos la flag `--no-standalone`
@@ -227,7 +227,7 @@ Aquí tendremos q escoger ciertas opciones para configurar nuestro proyecto:
 
 El resultado es la siguiente estructura de carpetas
 
-![not found](img/4.png)
+![not found](img/4-1.png)
 
 5. entramos dentro del directoria principal de nuestra app (bases) y para lanzar el servidor hacemos
 
@@ -305,7 +305,7 @@ export class CounterComponent{
 una vez hecho esto tenemos q registrar nuestro nuevo componente en el modulo principàl de la aplicacion 
 
 
-![not found](img/5.png)
+![not found](img/5-1.png)
 
 Ahora cada vez q use este componente, insertando su selector en mi html, cada contador sera independiente
 
@@ -326,7 +326,7 @@ Por lo general las apps de Angular tienen más de un módulo.
 
 El módulo creado por nosotros debe tener la siguiente estructura:
 
-![not found](img/6.png)
+![not found](img/6-1.png)
 
 
 ### Creación de módulos con CLI
@@ -335,7 +335,7 @@ El módulo creado por nosotros debe tener la siguiente estructura:
 
 Una vez creado asi el componente podemos añadir todo el sistema de directorios q contendrá el módulo
 
-![not found](img/7.png)
+![not found](img/7-1.png)
 
 Las pages sera un componente que agrupe al resto de componentes que forman el módulo. Lo usaremos principalmente para el router, es decir cuando accedamos a una ruta concreta 
 mostraremos las páginas asociadas a esa url.
@@ -408,7 +408,7 @@ un evento en angular usamos `()` como por ejempplo `(click)='my_function()'` si 
 cuando queremos hacer un two-way data biding combinamos ambas `[()]` junto con el ngModel `[(ngModel)]="character.power"` esta directiva `ngModel`
 se usa en formularios (ya no es la mejor opción)
 
-`ngModel` es una directiva en Angular que nos permite sincronizar el valor de un campo en el HTML (como un <input>, <textarea>, etc.) con una propiedad en el 
+`ngModel` es una directiva en Angular que nos permite sincronizar el valor de un campo en el HTML (como un input, textarea, etc.) con una propiedad en el 
 componente TypeScript. Esto se conoce como two-way data binding (enlace de datos bidireccional), ya que los cambios en el HTML se reflejan automáticamente 
 en el componente, y los cambios en el componente se reflejan en el HTML. Es especialmente útil para formularios o cualquier campo donde el usuario ingrese datos.
 
@@ -598,7 +598,7 @@ source : https://platzi.com/cursos/angular/
 `
 si lo hacemos instalando CLI localmente tendremos el siguiente esquema, en el directorio del proyecto un node_modules correspondiente al angular-cli instalado localmente y dentro de la applicacion en sí otro node_modules.
 
-![alt text](img/1.png)
+![alt text](img/1-3.png)
 
 2. Finalmente para ejecutar el proyecto hacemos `npx ng serve` siempre desde la raiz o desde dnd se encuentra el `package.json` de nuestro proyecto. 
 
@@ -673,7 +673,7 @@ En el directorio `src` tenemos los directorios
 
 ## Arquitectura de una app Angular
 
-![not found](img/4.png)
+![not found](img/4-2.png)
 
 ### Modulos
 
@@ -784,7 +784,7 @@ p{
 ```
 Este componente `app-root` lo podremos insertar en el index.html para q se renderice.
 
-![not found](img/5.png)
+![not found](img/5-2.png)
 
 
 ## Creando nuestro primer componente
@@ -796,18 +796,18 @@ ng g c componente-padre
 
 2. esto crea una carpeta del mismo nombre q el componente con los siguientes archivos
 
-![not found](img/6.png)
+![not found](img/6-2.png)
 
 3. en cuanto creamos el componente este se añade al modulo principal (app.module) directamente
 
-![not found](img/7.png)
+![not found](img/7-2.png)
 
 
 4. este componente padre vive dentro del componente principal q es `app.complonent.ts ` por lo q el nuevo componente lo tenemos q llamar dentro del html de este utilizando el selector de su archivo .ts
 
-![not found](img/8.png)
+![not found](img/8-2.png)
 
-![not found](img/9.png)
+![not found](img/9-2.png)
 
 
 ## Data binding (enlace de datos)
@@ -880,7 +880,7 @@ Hay distintos modos de pasar datos entre controlador(component.ts) y l vista (co
 3. intercambio vidireccional
    1. usando ng-models ([(ng-model)] = 'property')
 
-![not found](img/10.png)
+![not found](img/10-2.png)
 
 
 ### Metadata
