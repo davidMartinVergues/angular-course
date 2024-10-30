@@ -598,7 +598,7 @@ source : https://platzi.com/cursos/angular/
 `
 si lo hacemos instalando CLI localmente tendremos el siguiente esquema, en el directorio del proyecto un node_modules correspondiente al angular-cli instalado localmente y dentro de la applicacion en sí otro node_modules.
 
-![alt text](img/1.png)
+![alt text](img/1-3.png)
 
 2. Finalmente para ejecutar el proyecto hacemos `npx ng serve` siempre desde la raiz o desde dnd se encuentra el `package.json` de nuestro proyecto. 
 
@@ -673,7 +673,7 @@ En el directorio `src` tenemos los directorios
 
 ## Arquitectura de una app Angular
 
-![not found](img/4.png)
+![not found](img/4-2.png)
 
 ### Modulos
 
@@ -784,7 +784,7 @@ p{
 ```
 Este componente `app-root` lo podremos insertar en el index.html para q se renderice.
 
-![not found](img/5.png)
+![not found](img/5-2.png)
 
 
 ## Creando nuestro primer componente
@@ -796,18 +796,18 @@ ng g c componente-padre
 
 2. esto crea una carpeta del mismo nombre q el componente con los siguientes archivos
 
-![not found](img/6.png)
+![not found](img/6-2.png)
 
 3. en cuanto creamos el componente este se añade al modulo principal (app.module) directamente
 
-![not found](img/7.png)
+![not found](img/7-2.png)
 
 
 4. este componente padre vive dentro del componente principal q es `app.complonent.ts ` por lo q el nuevo componente lo tenemos q llamar dentro del html de este utilizando el selector de su archivo .ts
 
-![not found](img/8.png)
+![not found](img/8-2.png)
 
-![not found](img/9.png)
+![not found](img/9-2.png)
 
 
 ## Data binding (enlace de datos)
@@ -880,7 +880,7 @@ Hay distintos modos de pasar datos entre controlador(component.ts) y l vista (co
 3. intercambio vidireccional
    1. usando ng-models ([(ng-model)] = 'property')
 
-![not found](img/10.png)
+![not found](img/10-2.png)
 
 
 ### Metadata
