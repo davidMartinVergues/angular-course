@@ -1,0 +1,19 @@
+
+<h4>{{ greet }} </h4>
+
+<p>Sintax clasica</p>
+
+
+<ul>
+ <li *ngFor="let task of tasks">
+    {{ task }}
+ </li>
+</ul>
+ 
+<p>usando la nueva Sintax</p>
+
+<ol>
+  @for (item of tasks; track item){
+    <li>{{item}} => at position {{ $index}}</li>
+  }
+</ol>

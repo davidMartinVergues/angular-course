@@ -1,3 +1,25 @@
+- [Angular - Fernando Herrera](#angular---fernando-herrera)
+  - [TypeScript Refresh](#typescript-refresh)
+    - [Modulos y export/import](#modulos-y-exportimport)
+  - [Angular Basics](#angular-basics)
+    - [Que es Angular](#que-es-angular)
+    - [Los 5 bloques fundamentales de angular](#los-5-bloques-fundamentales-de-angular)
+    - [Primer proyecto en angular](#primer-proyecto-en-angular)
+    - [Explicacion de los archivos creados x ng new](#explicacion-de-los-archivos-creados-x-ng-new)
+    - [Componentes en angular](#componentes-en-angular)
+    - [App Component](#app-component)
+  - [Agrupar los arhchivos en modulos](#agrupar-los-arhchivos-en-modulos)
+    - [Creación de módulos con CLI](#creación-de-módulos-con-cli)
+  - [Directivas ngClass](#directivas-ngclass)
+  - [@Input()](#input)
+  - [Data binding](#data-binding)
+  - [@Output](#output)
+  - [Servicios](#servicios)
+- [Frontend con Angular - platzi](#frontend-con-angular---platzi)
+  - [Curso de Angular 17: Creación de Aplicaciones Web - platzi](#curso-de-angular-17-creación-de-aplicaciones-web---platzi)
+    - [Instalaciones](#instalaciones)
+    - [Creacion de un proyecto](#creacion-de-un-proyecto)
+    - [Componentes](#componentes)
 - [Angular freecodecamp Course](#angular-freecodecamp-course)
   - [Intro](#intro)
     - [SPA - Single Page Application](#spa---single-page-application)
@@ -27,13 +49,548 @@
     - [String Interpolation](#string-interpolation)
     - [Property Binding](#property-binding)
     - [Event Binding](#event-binding)
-    - [Data Binding](#data-binding)
+    - [Data Binding](#data-binding-1)
       - [Custom Validators](#custom-validators)
     - [Directivas de control](#directivas-de-control)
       - [ngIf](#ngif)
       - [ngFor](#ngfor)
 
 
+# Angular - Fernando Herrera
+
+## TypeScript Refresh
+
+Si queremos ejecutar codigo TS en consola, sin necesidad de ir al navegador y ver los outputs en consola, tenemos q crear un proyecto con `node` e instalar las dependencias siguientes como dev:
+
+`npm install typescript ts-node @types/node --save-dev`
+
+Una vez instaladas tenemos q crear un archivo de configuracion de TS 
+
+`npx tsc --init`
+
+y ahora para ejecutar los archivos en TS usmaos el comando 
+
+`npx ts-node src/index.ts`
+
+Para no tener q ejecutar este comando tan largo podemos generar un script en el archivo `package.json`
+
+```json
+{
+  "name": "01_typescript_intro",
+  "version": "1.0.0",
+  "main": "index.ts",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "start":"npx ts-node 01-basic-types.ts"
+  },
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "@types/node": "^22.7.4",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.6.2"
+  }
+}
+
+```
+
+y ahora para ejecutar basta con ejecutar:
+
+`npm start`
+
+
+Tambien podemos compilar el codigo TS en un JS con la ayuda del comando :
+
+`npx tsc`
+
+y ya podemos ejecutar el archivo js directamente con node
+
+`node index.js`
+
+### Modulos y export/import
+
+Cuando ponemos al final de un archivo `export{}` convierte ese archivo en módulo y solo se exportara lo q pongamos dentro del objeto `export`. Otro modo de hacerlo es usando `export` delante de la variable/objeto/funcion... q queramos exportar
+
+```js
+interface MyProducts {
+    description:string;
+    price:number;
+}
+
+
+export {MyProducts};
+``` 
+o 
+```js
+export interface MyProducts {
+    description:string;
+    price:number;
+}
+``` 
+Tenemos que ir con cuidado con las exportaciones/importaciones q los archivos q intervengan no tengan codigo ejecutando, ya q por defecto cuando se haga el import el archivo q se importa se ejecutara.
+
+
+
+## Angular Basics
+
+### Que es Angular
+
+- Es un framework estandarizado para crear aplicaciones SPAs, es decir todos los proyectos de angular utilizaran al final los mismo componentes.
+- Angular viene con todo preparado para poder trabajar
+- Angular crea aplicaciones modulares
+
+### Los 5 bloques fundamentales de angular
+
+
+1. Componentes => Es un elemento formado por un bloque de html y su clase de TS principalmente. Se busca que sean lo más simples posibles y el menor código posible.
+2. Rutas => permite mostrar distintos componentes en funcion de la url solicitada
+3. Directivas  
+   1. directivas de componentes => es parecido a los componentes en el sentido q es un trozo de html con funcionalidad integrada que se inserta dentro de otro componente, un "componente" q se integra en otro
+   2. de atributos => cambian la apariencia/comportamiento de un elemento, de otro componento o de una directiva.
+   3. estructurales => modifican el DOM o el HTML (añadiendo/eliminando html)
+
+4. Servicios => son lugares centralizados de información donde se controla el estado de los componentes. Tb si tenemos botones x ejemplo llaman tb a servicios.
+5. Modulos => permite agrupar todos los componentes anteriores (componentes, rutas, directivas y servicios) inclusive pueden albergar otros módulos.
+
+![not found](img/2.png)
+
+incluso hay paquetes disponibles para usarlos en tu aplicación, por ejemplo hay modulos que te muestran calendatios, o módulos para formularios, etc... con el objetivo de no volver a crear algo q ya esta hecho, simplemente reutilizarlo.
+
+**Desde Angular v17, por defecto los proyectos trabajan sin módulos (module-less)**
+
+**Pero para trabajar de forma tradicional:**
+
+```js
+ng new <nombre de la aplicación> --standalone false
+```
+o 
+
+```js
+ng new <nombre de la aplicación> --no-standalone
+```
+
+### Primer proyecto en angular
+
+1. Primero instalar localmente el cli de angular(para poder tener diferentes verisones de angular en función del proyecto)
+
+`npm install @angular/cli@18 --save-dev`
+
+2. comporbamos q se ha instalado bien (como hemos instalado localmente tenemos q ejecutar todos los comando `ng` precedidos de `npx`)
+
+`npx ng version`
+
+3. cuando hacemos esto creamos localmente un `node_modules` y `package.json` pertenecientes al cli de angular 
+
+![not found](img/3.png)
+
+4. creamos nuestro proyecto. Ahora trabajaremos como en las versiones anteriores a la 17 de angular, cuando se usaban los modulos. Recordemos q a partir de la v17 de angular no se trabaja con modulos.
+   Para iniciar un proyecto q sea compatible con modulos usaremos la flag `--no-standalone`
+
+   `npx ng new my_project --no-standalone`
+
+Aquí tendremos q escoger ciertas opciones para configurar nuestro proyecto: 
+  - si usaremos CSS o algun preprocesador de CSS tipo SASS, Less,..
+  - si queremos activar:
+    - SSR (server-site rendering)  => la pagina se crea en el servidor y es entregada al navegador (accedemos a un endpoint en el server se monta el html y se entrega al browser) esto es para optimizar el SEO y muy buena si en la app hay contenido dinámico como un dashboard 
+    - SSG (static site generation) =>  en SPA al hacer build se generan todos los html necesarios de la app y cuando el cliente (browser) lo solicita le lleva todo el html por lo q la app es muy rapida pero no sirve cuando tiene contenido dinámico
+
+    * entonces Angular es capaz d e combinar ambas tecnologías sirviendo todas las partes estaticas de nuesta app como SSG y las partes dinamicas renderizarlas en el servidor (SSR)
+
+    * PARA TRABAJAR DE MANERA CLÁSICA A ESTA PREGUNTA RESPONDEREMOS Q `NO ACTIVAREMOS SSR NI SSG`
+
+El resultado es la siguiente estructura de carpetas
+
+![not found](img/4.png)
+
+5. entramos dentro del directoria principal de nuestra app (bases) y para lanzar el servidor hacemos
+
+`npx ng serve` o `npx ng serve -o` para q cuando termine de compilar abra el navegador directamente.
+
+### Explicacion de los archivos creados x ng new
+
+1. `.editorconfig` 
+
+este archivo permite settear las configuraciones para el vscode para que todos las personas q trabajen en el proyecto lo vean del mismo modo ( es solo visual, por ejemplo numero de espacios, los strings con ' en lugar de ", etc..)
+
+2. `angular.json`
+
+Configuraciones globales de angular para la ejecucion de la aplicacion.
+
+3. `package.json`
+
+es propio de las aplicaciones de nodeJS ya que Angular está construído sobre nodeJS. Tenemos los scripts, comandos para compilar la app o lanzar el servidor etc...
+
+
+
+
+
+Directivas principales de angular:
+
+* ngIf
+  
+  Ayuda a mostrar ciertos elemntos html, de hecho los elementos html q no entran en el if son eliminados/destruidos 
+
+* ngFor
+
+  nos permite iterar sobre elmentos o duplicar elementos 
+
+
+### Componentes en angular
+
+Tienen  3 partes 
+
+1. archivo .ts
+
+Es el realmente importante. Tendrá la lógica del componente
+
+2. archivo .html
+
+Este archivo .ts va a depender de otro elemento que será código `html` q lo podemos escribir inline en el propio .ts o si es más extenso de 4 líneas se recomienda ponerlo en un archivo externo.
+
+3. archivos css
+
+un componente puede tener tantos archivos css como necesitemos. Una propiedad importante es q este css esta encapsulado, es decir todo el código css sólo se aplicará a ese componente no afectará al resto. Si ponemos un estilo para los H1 solo afectará a los h1 de ese componnete
+
+4. archivos .spec
+
+Son archivos que se utilizan en el proceso de testing automatico.
+
+### App Component
+
+los componentes los podemos crear manualmente o utilizando el angular CLI. Primero vamos a hacer manualmente. Dentro de la carpeta app creamos otra carpeta cn el nombre de nuestro componente q sera `counter` y dentro de esta los archivos necesarios (el css html y ts)
+
+1. en el archivo .ts exportamos nuestra clase y cn el decorador indicamos el selector y templateURL styleUrl
+
+```js
+import { Component } from "@angular/core";
+
+@Component({
+  selector:'app-counter',
+  templateUrl:'./counter.component.html',
+  styleUrl:'./counter.component.css'
+})
+export class CounterComponent{
+
+}
+
+```
+
+una vez hecho esto tenemos q registrar nuestro nuevo componente en el modulo principàl de la aplicacion 
+
+
+![not found](img/5.png)
+
+Ahora cada vez q use este componente, insertando su selector en mi html, cada contador sera independiente
+
+```html
+<app-counter></app-counter>
+<app-counter></app-counter>
+```
+
+## Agrupar los arhchivos en modulos
+
+Todo lo q tenga una funcoinalidad relacionada va a estar dentro de un mismo directorio. Por jemplo vamos a hacer un modulo de `Heroes` para ello podemos usar el angular/cli y especificarle un path 
+
+`npx ng g c heroes/list --skip-tests`
+
+A medida que vamos creando componentes en el `app.module.ts` se irán acumulando los imports, para evitar esto usaremos los modulos mediante el decorador `@NgModule`.
+Un modulo no deja de ser una class de TS que sirve para encapsular 
+Por lo general las apps de Angular tienen más de un módulo.
+
+El módulo creado por nosotros debe tener la siguiente estructura:
+
+![not found](img/6.png)
+
+
+### Creación de módulos con CLI
+
+`[npx] ng g m  <module's name>`
+
+Una vez creado asi el componente podemos añadir todo el sistema de directorios q contendrá el módulo
+
+![not found](img/7.png)
+
+Las pages sera un componente que agrupe al resto de componentes que forman el módulo. Lo usaremos principalmente para el router, es decir cuando accedamos a una ruta concreta 
+mostraremos las páginas asociadas a esa url.
+
+## Directivas ngClass
+
+## @Input()
+
+se utiliza en los componentes para recibir datos desde un componente padre. Es decir, permite que un componente hijo pueda aceptar valores o datos que le son enviados desde su componente padre. Esto facilita la comunicación unidireccional entre componentes en Angular, donde el flujo de datos se da del componente padre hacia el componente hijo.
+
+por ejemplo:
+
+```js
+
+// ARCHIVO .TS DEL PADRE
+@Component({
+  selector:'app-dbz-main-page',
+  templateUrl:'./main-page.component.html'
+})
+export class MainPageComponent{
+
+  public charcaters : Character[] = [
+    {name:"krillin",power:500},
+    {name:"Goku",power:9500},
+    {name:"Vegeta",power:7500},
+    {name:"Kid Trunks",power:10},
+  ]
+}
+
+// ARCHIVO HTML DEL PADRE
+
+<div class='col'>
+  <componente-hijo [characterList]='charcaters'></componente-hijo>
+</div>
+
+```
+
+en el hijo hay una propiedad que se llama `componente-hijo` y desde el padre se le asigna a `charcaters` q es una lista q existe en el padre. Entonces en el hijo la propiedad `characterList` recupera esa lista y en el html hijo se pinta los datos:
+
+```html
+<ul class="list-group">
+  <li class="list-group-item"
+  [ngClass]="{
+    'list-group-item-dark': isLast,
+    'list-group-item-primary':isEven
+  }"
+    *ngFor="let character of characterList;
+    index as i
+    last as isLast;
+    even as isEven;
+    ">
+    <span class="text-primary"> {{ i }}</span>
+    {{ character.name}} - {{character.power}}
+    <span> es el ultimo : {{ isLast }} </span>
+    <span> es par : {{ isEven }} </span>
+  </li>
+</ul>
+```
+
+## Data binding 
+
+Angular permite vincular datos entre el componente y la vista de dos modos:
+
+1. One-way data binding => los datos solo fluyen del componente al html
+2. Two-way data binding => si hacemos un cambio en el componente se transmite al html y di hacemos un cambio en el html se pasa al componente 
+
+
+para hacer el two-ways tenemos una sintaxi concreta, la llamada `banna in a box` [()] pq esta sintaxi, si recordamos cuando queremos escuchar 
+un evento en angular usamos `()` como por ejempplo `(click)='my_function()'` si queremos enlazar una propiedad usamos `[]` por ejemplo `<input [value]='someData'>` 
+cuando queremos hacer un two-way data biding combinamos ambas `[()]` junto con el ngModel `[(ngModel)]="character.power"` esta directiva `ngModel`
+se usa en formularios (ya no es la mejor opción)
+
+`ngModel` es una directiva en Angular que nos permite sincronizar el valor de un campo en el HTML (como un <input>, <textarea>, etc.) con una propiedad en el 
+componente TypeScript. Esto se conoce como two-way data binding (enlace de datos bidireccional), ya que los cambios en el HTML se reflejan automáticamente 
+en el componente, y los cambios en el componente se reflejan en el HTML. Es especialmente útil para formularios o cualquier campo donde el usuario ingrese datos.
+
+entonces dsde el formulario se puede generar un evento submit q envie los datos al ts para recuperar los datos.
+
+```js
+<form action="" class="row" (ngSubmit)="emitCharacter()">
+
+```
+para ello usaremos `@Output` para emitir eventos al padre
+
+##  @Output
+
+Define una salida del componente que el componente padre puede suscribirse para escuchar. Las suscripciones estan relacionadas con el concepto de `RXJS` que es una libreria propia de angular para trabajar cn `programación reactiva` todo el tema de `observables` es rxjs. 
+Un `observable` es un objeto que va emitiendo diferentes datos a lo largo de su ciclo de vida.
+
+imaginemos que tenemos un componente padre que contiene una lista de persoanjes, y un componente hijo que es el encargado de pintar esa lista y además tiene un formulario para registrar un nuevo personaje, entonces estos dos comopnentes estan enlazados de tal modo que el padre
+le pasa los datos al hijo para listar los datos y el hijo a través de un formulario le pasa los datos al padre para incluir un nuevo personaje a la lista del padre.
+
+Para poder hacer esto necesitamos que el hijo emita un evento y necesitamos que el padre esté suscrito al componente hijo para escuchar ese evento.
+
+Para generar ese evento creamos en el hijo un objeto `eventEmiter`
+
+```js
+
+@Output()
+onNewCharacter : EventEmitter<Character> = new EventEmitter()
+
+```
+el objeto eventEmiter es un genérico por lo q puede emitir cualquier tipo de dato, así que le pasamos el dato que vamos a propagar, en nuestro caso será un objeto tipo Character.
+Para que pueda ser escuchado debemos usar el decorador `Output()` dentro de los paréntesis podemos poner el nombre que queramos sino por defecto será `onNewCharacter` Este output permite emitir un evento de nombre onNewCharacter. 
+
+Entonces dentro de la función que se activa cuando hacemos submit del formulario es dnd lanzaremos el evento 
+
+```js
+import { Component, EventEmitter, Output } from "@angular/core";
+import { Character } from '../../interfaces/character.interface';
+
+@Component({
+  selector:'dbz-add-charcater',
+  templateUrl: './add-character.component.html'
+})
+export class AddCharacterComponent{
+
+  @Output()
+  public onNewCharacter : EventEmitter<Character> = new EventEmitter()
+
+  public character:Character = {
+    name:"abc",
+    power: 55
+  }
+
+  emitCharacter():void{
+
+    if (this.character.name.length === 0) return;
+
+    this.onNewCharacter.emit(this.character)
+
+    // reseteamos el formulario
+    this.character.name = ''
+    this.character.power = 0
+  }
+
+}
+
+```
+
+para poder escuchar el evento en el componente padre usaremos la siguiente sintaxis:
+
+```html
+
+<dbz-add-charcater (onNewCharacter)="addNewCharacter($event)"></dbz-add-charcater>
+```
+
+con el `$event` capturamos lo que emite el evento, en este caso un objeto tipo Character
+
+
+## Servicios
+
+Tendrá la lógica de negocio para gestionar los datos. Una caracteristica principal de los servicios es q son un `singleton` solo puede haber una instancia de esta clase por lo q conserva el estado y el valor (datos) a lo largo de toda la aplicación(siempre y cuando lo hagamos mediante inyección de dependencias), esto es gracias a que lo declaramos con el decorador `@Injectable({providedIn: 'root'})` este provideIn : root, hace que sea un singleton para toda la app.
+
+En nuestro caso el objetivo de crear un servicio es poder tener nuestros datos disponibles donde queramos, es decir nuestros personajes de dbz.
+
+Tenmos que tener en cuenta que todos los objetos en js se pasan como referencia por lo q si lo cambiamos en un sitio tb nos modificará el original. Más adelante veremos técnicas para romper esa referencia.
+
+Nuetsro servicio tendria esta pinta:
+
+```js
+
+import { Injectable } from '@angular/core';
+import { Character } from '../interfaces/character.interface';
+
+@Injectable({providedIn: 'root'})
+
+export class DbzService {
+
+  public charcaters : Character[] = [
+    {name:"krillin",power:500},
+    {name:"Goku",power:9500},
+    {name:"Vegeta",power:7500},
+    {name:"Kid Trunks",power:10},
+  ]
+
+  public addNewCharacter(character:Character):void{
+
+    this.charcaters.push(character)
+
+  }
+
+  public delOneCharacter(idx:number):void{
+
+    this.charcaters.splice(idx,1)
+
+  }
+}
+```
+
+Ahora este se puede inyectar dnd queramos , hasta ahora teníamos toda esta información en el main-page(que es componente padre y de él pasa al resto de nuestra aplicaciópn) así que le inyectaremos nuestro servicio, se inyecta en el constructor
+
+```js
+@Component({
+  selector:'app-dbz-main-page',
+  templateUrl:'./main-page.component.html'
+})
+export class MainPageComponent{
+
+  constructor(public DbzService:DbzService){}
+
+}
+
+```
+
+A partir de aqui tenemos que llamar a todos los elementos cn el prefijo `DbzService`
+
+```html
+<div class="row">
+  <div class="col">
+    <dbz-list
+    [characterList]="DbzService.charcaters"
+    (delCharacter)="DbzService.delOneCharacter($event)"
+    ></dbz-list>
+  </div>
+  <div class="col">
+    <dbz-add-charcater (onNewCharacter)="DbzService.addNewCharacter($event)"></dbz-add-charcater>
+  </div>
+</div>
+```
+este no es mejor modo de hacerlo pero por ahora nos vale.
+
+
+
+
+
+
+
+
+
+
+
+
+
+<!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+
+# Frontend con Angular - platzi
+
+source  : https://platzi.com/ruta/web-angular/
+
+## Curso de Angular 17: Creación de Aplicaciones Web - platzi
+
+source : https://platzi.com/cursos/angular/
+
+### Instalaciones
+
+0. nvm - node version manager
+1. node / npm
+2. instalar angular
+   1. Globalmente
+      1. Para ello podemos hacerlo global `sudo npm i @angular/cli -g` esto instalara el cli de angular de manera global (globalmente solo puede haber un Angular-CLI) 
+          el problema viene cuando queremos trabajar con distintas veriones de angular para ello instalaremos las verisones del CLI localmente 
+      2. LOCALMENTE - instalando el cli como una dependencia de desarollo
+         1. Luego cada comando de angular tiene q estar precedido de `npx` para q ejecute el cli local del proyecto (lo buscara en node_modules) por lo q nos debemos situar en la raíz del proyecto
+            1. `npm install @angular/cli@17.0.0 --save-dev`
+
+### Creacion de un proyecto
+
+1. `npx ng new todoapp` (si no queremos incluir tests añadiremos el flag `--skip-tests`)
+`
+si lo hacemos instalando CLI localmente tendremos el siguiente esquema, en el directorio del proyecto un node_modules correspondiente al angular-cli instalado localmente y dentro de la applicacion en sí otro node_modules.
+
+![alt text](img/1.png)
+
+2. Finalmente para ejecutar el proyecto hacemos `npx ng serve` siempre desde la raiz o desde dnd se encuentra el `package.json` de nuestro proyecto. 
+
+En el directorio `app` tendremos 3 archivos importantes:
+  1. app.component.ts
+  2. app.component.html
+  3. app.component.css
+
+### Componentes
+
+Hasta ahora hemos trabajado en el comonente maestro q es el  `app.component`.
+
+Ahora vamos a crear nuestros propios componentes (páginas) y todos ellos los guardaremos en una carpeta `pages`
+
+`npx ng g component pages/home`
+`npx ng g component pages/labs`
+
+<!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
 
 # Angular freecodecamp Course
 
