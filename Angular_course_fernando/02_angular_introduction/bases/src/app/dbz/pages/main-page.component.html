@@ -6,8 +6,8 @@
 <div class="row">
   <div class="col">
     <dbz-list
-    [characterList]="DbzService.charcaters"
-    (delCharacter)="DbzService.delOneCharacter($event)"
+    [characterList]="chracters"
+    (delCharacter)="onDeleteCharacter($event)"
     ></dbz-list>
   </div>
   <div class="col">

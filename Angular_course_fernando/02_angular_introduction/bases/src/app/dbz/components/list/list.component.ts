@@ -10,16 +10,16 @@ import { Component, EventEmitter, Input, Output } from '@angular/core';
 export class ListComponent {
 
   @Output()
-  public delCharacter: EventEmitter<number> = new EventEmitter();
+  public delCharacter: EventEmitter<string> = new EventEmitter();
 
   @Input()
-  public characterList : Character[] = [
-    {name:"Trunk", power:10}
-  ]
+  public characterList : Character[] = []
 
-  delCharacter_(idx:number):void{
+  delCharacter_(id?:string):void{
 
-    this.delCharacter.emit(idx)
+    if (!id) return;
+
+    this.delCharacter.emit(id)
 
   }
 

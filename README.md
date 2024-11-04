@@ -1,6 +1,10 @@
 - [Angular - Fernando Herrera](#angular---fernando-herrera)
   - [TypeScript Refresh](#typescript-refresh)
     - [Modulos y export/import](#modulos-y-exportimport)
+    - [Destructiring, rest operator y spread operator](#destructiring-rest-operator-y-spread-operator)
+      - [Destructuring (Desestructuración):](#destructuring-desestructuración)
+      - [Rest Operator (...):](#rest-operator-)
+      - [Spread Operator:](#spread-operator)
   - [Angular Basics](#angular-basics)
     - [Que es Angular](#que-es-angular)
     - [Los 5 bloques fundamentales de angular](#los-5-bloques-fundamentales-de-angular)
@@ -15,6 +19,7 @@
   - [Data binding](#data-binding)
   - [@Output](#output)
   - [Servicios](#servicios)
+  - [UUI library](#uui-library)
 - [Frontend con Angular - platzi](#frontend-con-angular---platzi)
   - [Curso de Angular 17: Creación de Aplicaciones Web - platzi](#curso-de-angular-17-creación-de-aplicaciones-web---platzi)
     - [Instalaciones](#instalaciones)
@@ -156,6 +161,155 @@ export interface MyProducts {
 ``` 
 Tenemos que ir con cuidado con las exportaciones/importaciones q los archivos q intervengan no tengan codigo ejecutando, ya q por defecto cuando se haga el import el archivo q se importa se ejecutara.
 
+### Destructiring, rest operator y spread operator
+
+#### Destructuring (Desestructuración):
+Es una forma de extraer valores de arreglos u objetos de manera más concisa.
+
+Con Arreglos:
+
+```js
+javascriptCopy// Forma tradicional
+const numeros = [1, 2, 3];
+const primero = numeros[0];
+const segundo = numeros[1];
+```
+
+```js
+// Destructuring
+const [primero, segundo, tercero] = numeros;
+// primero = 1, segundo = 2, tercero = 3
+```
+Con Objetos:
+
+```js
+javascriptCopyconst persona = { nombre: 'Juan', edad: 30, ciudad: 'Madrid' };
+
+// Destructuring de objetos
+const { nombre, edad } = persona;
+// nombre = 'Juan', edad = 30
+```
+#### Rest Operator (...):
+
+Permite recoger múltiples elementos en un arreglo.
+
+
+En Arreglos:
+```js
+javascriptCopy// Recoger elementos restantes
+const [primero, ...resto] = [1, 2, 3, 4, 5];
+// primero = 1, resto = [2, 3, 4, 5]
+```
+
+En Funciones:
+```js
+javascriptCopy// Agrupar argumentos indefinidos
+function sumar(...numeros) {
+  return numeros.reduce((a, b) => a + b, 0);
+}
+sumar(1, 2, 3, 4) // Devuelve 10
+```
+
+En Objetos:
+
+```js
+javascriptCopyconst { nombre, ...demasInfo } = persona;
+// nombre = 'Juan'
+// demasInfo = { edad: 30, ciudad: 'Madrid' }
+Combinando Destructuring y Rest:
+javascriptCopyconst [primero, segundo, ...demas] = [1, 2, 3, 4, 5];
+// primero = 1
+// segundo = 2
+// demas = [3, 4, 5]
+```
+
+Beneficios:
+
+Código más limpio y legible
+Extracción simple de datos
+Flexibilidad al manejar arreglos y objetos
+Copy
+
+#### Spread Operator:
+
+Es un operador (...) que "expande" un elemento iterable (como arrays u objetos) en sus elementos individuales.
+Usos principales:
+
+Copiar Arrays:
+
+```js
+javascriptCopyconst original = [1, 2, 3];
+const copia = [...original]; 
+// copia es un nuevo array [1, 2, 3]
+// Es diferente a original, no es una referencia
+```
+
+
+Combinar Arrays:
+
+```js
+javascriptCopyconst arr1 = [1, 2, 3];
+const arr2 = [4, 5, 6];
+const combinado = [...arr1, ...arr2]; 
+// [1, 2, 3, 4, 5, 6]
+
+// Añadir elementos
+const nuevo = [...arr1, 7, 8]; 
+// [1, 2, 3, 7, 8]
+```
+
+Pasar Argumentos a Funciones:
+
+```js
+javascriptCopyfunction suma(a, b, c) {
+  return a + b + c;
+}
+
+const numeros = [1, 2, 3];
+console.log(suma(...numeros)); // 6
+```
+
+Con Objetos:
+
+
+```js
+javascriptCopyconst objeto1 = { x: 1, y: 2 };
+const objeto2 = { z: 3 };
+
+// Combinar objetos
+const combinado = { ...objeto1, ...objeto2 };
+// { x: 1, y: 2, z: 3 }
+
+// Sobreescribir propiedades
+const modificado = { ...objeto1, y: 10 };
+// { x: 1, y: 10 }
+```
+
+
+Clonar y Modificar Objetos:
+
+```js
+javascriptCopyconst original = { a: 1, b: 2 };
+const copia = { ...original }; // Copia superficial
+
+const modificado = { ...original, c: 3 };
+// { a: 1, b: 2, c: 3 }
+```
+
+En Funciones con Argumentos Rest:
+
+```js
+javascriptCopyfunction mostrar(...args) {
+  console.log(args); // Convierte los argumentos en un array
+}
+
+mostrar(1, 2, 3); // [1, 2, 3]
+```
+Consideraciones:
+
+Hace una copia superficial (no clona objetos anidados)
+Útil para manipular arrays y objetos sin modificar los originales
+Muy usado en programación funcional y React
 
 
 ## Angular Basics
@@ -558,8 +712,38 @@ A partir de aqui tenemos que llamar a todos los elementos cn el prefijo `DbzServ
 ```
 este no es mejor modo de hacerlo pero por ahora nos vale.
 
+Lo más recomendado es inyectar nuestro servicio como privado como buenas practicas. Deberia ser así:
+
+```js
+
+export class MainPageComponent{
+
+  constructor(private DbzService:DbzService){}
+
+}
+```
+y poder acceder a el usando getters or setter segun necesitemos e incluso haciendo copia de los datos qpara exponerlos, a veces las copias no seran necesarias porq queremos modificar los datos en las bbdd.
 
 
+
+## UUI library
+
+obviamente cuando tenemos q eliminar un objeto debems hacerlo por un identificador único, este lo podemos conseguir usando el UUI que genera identificadores únicos con cierto formatos.
+
+para instalar uuid 
+
+```
+npm i uuid
+npm i --save-dev @types/uuid 
+```
+para usarlo nada nmas lo importamos y usamos una de sus funciones:
+
+```js
+import { v4 as get_uuid } from 'uuid';
+
+get_uuid() // esto generará un id único
+
+```
 
 
 
