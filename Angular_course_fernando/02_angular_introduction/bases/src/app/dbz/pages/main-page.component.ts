@@ -20,6 +20,12 @@ onDeleteCharacter(id:string):void{
 
 }
 
+addCharacter(newCharacter:Character):void{
+
+  this.DbzService.addNewCharacter(newCharacter)
+
+}
+
 
 
 }

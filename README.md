@@ -20,6 +20,10 @@
   - [@Output](#output)
   - [Servicios](#servicios)
   - [UUI library](#uui-library)
+  - [Deploy de la Aplicacion](#deploy-de-la-aplicacion)
+    - [deploy local](#deploy-local)
+    - [Deploy en Netlifly](#deploy-en-netlifly)
+    - [Deploy en GitHub Pages](#deploy-en-github-pages)
 - [Frontend con Angular - platzi](#frontend-con-angular---platzi)
   - [Curso de Angular 17: Creación de Aplicaciones Web - platzi](#curso-de-angular-17-creación-de-aplicaciones-web---platzi)
     - [Instalaciones](#instalaciones)
@@ -401,7 +405,9 @@ Configuraciones globales de angular para la ejecucion de la aplicacion.
 
 es propio de las aplicaciones de nodeJS ya que Angular está construído sobre nodeJS. Tenemos los scripts, comandos para compilar la app o lanzar el servidor etc...
 
+4. Assets 
 
+es un directorio donde guardamos todos los elementos que nunca van a cambiar en nuestra aplicación, como las imagenes, los loaders, incluso js, css,... recursos estáticos.
 
 
 
@@ -746,7 +752,57 @@ get_uuid() // esto generará un id único
 ```
 
 
+## Deploy de la Aplicacion
 
+
+Haremos el deploy en `Netlify` y `GitHub Pages`.
+
+Primero hacemos un Build de nuestra app para generar nuestro build de produccioin y de ahi desplegarlo en un sitio web.
+
+Primero si hacemos `ng serve` para levantar la app en un servidor de desarrollo vemos:
+
+![not found](img/7-3.png)
+
+Vemos:
+
+- vendor.js => son todos los paquetes de node que necesitamos
+- runtime.js => lo q nos permite correr nuestra app
+- polyfills.js => permite la compatibilidad entre navegadores
+
+vemos cuanto pesa la app pero esto es previo al "tree shaking" que es el proceso de build optimizado para prod.
+
+
+Para generar el build podemos usar los scripts de npm en el package.json `npm run build` que ejecutaria `ng build`
+
+![not found](img/7-4.png)
+
+si nos fijamos los archivos que genera se les añade un `hash` por ejemplo `polyfills-FFHMD2TL.js` para evitar q el cache no actualice los cambios.
+
+Esto genera un nuevo directorio llamado `dist` y dentro de este un directorio bases y dentro un `browser` el contenido del browser es lo q se tiene q subir al servidor para q podamos ver la web.
+
+### deploy local
+
+para ello podemos usar un paquete llamado `http-server` que nos permite montar un servidor en local capaz de servir static files sin configuraciones.
+Cuando en web hablamos de static files nos referimos a archivos q no cambian, una vez hacemos el build de nuestra app en angular esos archivos no van a cambiar, es decir desde el backend no se van a crear nuevos archivos, por eso necesitamos un server q sirva los archivos de mi web. Solo con propósito de test. 
+Nos situamos en el directorio `browser` dentro de dist y alli ejecutamos `http-server -o` y nos dara una ip dnd podemos consultar nuestra web como si estuviera en produccion
+
+![not found](img/7-5.png)
+
+### Deploy en Netlifly
+
+es un servicio que nos permite desplegar las aplicaciones.
+
+Nos registramos y cuando entremos vamos a sites y alli subimos la carpeta `browser`
+
+![not found](img/7-6.png)
+
+esto nos dara una URL dnd podremos ver nuestra web funcionando 
+
+![not found](img/7-7.png)
+
+### Deploy en GitHub Pages
+
+Para poderlo desplegar con pages podemos hacerlo desde una rama pero siempre tenemos q tener en la raiz de nuestro repo una carpeta llamada `docs` entonces copiamos el contenido de la carpeta de dist>bases>browser en la carpeta docs
 
 
 
@@ -755,6 +811,7 @@ get_uuid() // esto generará un id único
 
 
 <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+
 
 # Frontend con Angular - platzi
 
@@ -2395,3 +2452,5 @@ y en el html lo iteramos
   </li>
 </ul>
 ```
+
+
