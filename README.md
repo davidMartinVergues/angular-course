@@ -804,7 +804,24 @@ esto nos dara una URL dnd podremos ver nuestra web funcionando
 
 Para poderlo desplegar con pages podemos hacerlo desde una rama pero siempre tenemos q tener en la raiz de nuestro repo una carpeta llamada `docs` entonces copiamos el contenido de la carpeta de dist>bases>browser en la carpeta docs
 
+tenemos que tenerlo asi
 
+![not found](img/7-8.png)
+
+entramos en settings del repo vamos a pages y le decimos q use la rama q deseemos y vaya a docs
+
+![not found](img/7-9.png)
+
+una vez termina el deploy vamos a actions y ahi nos dara la url dnd esta nuestra web
+
+![not found](img/7-10.png)
+
+
+pero no veremos nada xq mi app busca los archivos en el root de la app pero github pages añade a este root el nombre de mi repo por eso no encuentra los archivos
+
+![not found](img/7-11.png)
+
+necesitamos entrar en el index.html de docs y añadir este nombre al path
 
 
 
