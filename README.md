@@ -5,6 +5,13 @@
       - [Destructuring (Desestructuración):](#destructuring-desestructuración)
       - [Rest Operator (...):](#rest-operator-)
       - [Spread Operator:](#spread-operator)
+      - [Operadores `??`, `||` y `!!` en JavaScript](#operadores---y--en-javascript)
+        - [`??` (Nullish Coalescing Operator - Operador de fusión nula)](#-nullish-coalescing-operator---operador-de-fusión-nula)
+          - [Diferencia con `||` (OR lógico):](#diferencia-con--or-lógico)
+        - [`||` (Operador OR lógico)](#-operador-or-lógico)
+        - [`!!` (Doble negación - Conversión a booleano)](#-doble-negación---conversión-a-booleano)
+        - [Ejemplo combinado](#ejemplo-combinado)
+        - [Resumen](#resumen)
   - [Angular Basics](#angular-basics)
     - [Que es Angular](#que-es-angular)
     - [Los 5 bloques fundamentales de angular](#los-5-bloques-fundamentales-de-angular)
@@ -24,6 +31,33 @@
     - [deploy local](#deploy-local)
     - [Deploy en Netlifly](#deploy-en-netlifly)
     - [Deploy en GitHub Pages](#deploy-en-github-pages)
+  - [GifsApp Project](#gifsapp-project)
+    - [@ViewChild / @ViewChildren decorator](#viewchild--viewchildren-decorator)
+    - [Persistencia de datos en el navegador](#persistencia-de-datos-en-el-navegador)
+    - [Image Loader](#image-loader)
+  - [Country-SPA APP](#country-spa-app)
+    - [Routing básico - RouterLink / RouterLinkOptions](#routing-básico---routerlink--routerlinkoptions)
+    - [LazyLoad](#lazyload)
+    - [Reutilizacion de componentes](#reutilizacion-de-componentes)
+    - [Service for countries](#service-for-countries)
+    - [Capturar error en las llamadas http](#capturar-error-en-las-llamadas-http)
+    - [Leer argumentos de la url](#leer-argumentos-de-la-url)
+  - [🔹 RxJS en Angular](#-rxjs-en-angular)
+    - [¿Qué es un Observable?](#qué-es-un-observable)
+    - [Suscripción a un Observable](#suscripción-a-un-observable)
+    - [Uso de `.pipe()`](#uso-de-pipe)
+    - [Operadores comunes en `.pipe()`](#operadores-comunes-en-pipe)
+    - [**Transformación de Datos**](#transformación-de-datos)
+    - [**Efectos Secundarios**](#efectos-secundarios)
+    - [**Filtrado de Valores**](#filtrado-de-valores)
+    - [**Manejo de Errores**](#manejo-de-errores)
+    - [Conclusión](#conclusión)
+    - [Mejoras de nuestra Country-SPA app](#mejoras-de-nuestra-country-spa-app)
+      - [Refactor del service](#refactor-del-service)
+      - [uso de debounce](#uso-de-debounce)
+      - [Limpieza de suscripciones](#limpieza-de-suscripciones)
+      - [persistir datos entre pantallas](#persistir-datos-entre-pantallas)
+  - [Uso de pipes y PrimeNG](#uso-de-pipes-y-primeng)
 - [Frontend con Angular - platzi](#frontend-con-angular---platzi)
   - [Curso de Angular 17: Creación de Aplicaciones Web - platzi](#curso-de-angular-17-creación-de-aplicaciones-web---platzi)
     - [Instalaciones](#instalaciones)
@@ -314,6 +348,77 @@ Consideraciones:
 Hace una copia superficial (no clona objetos anidados)
 Útil para manipular arrays y objetos sin modificar los originales
 Muy usado en programación funcional y React
+
+ 
+
+#### Operadores `??`, `||` y `!!` en JavaScript
+
+##### `??` (Nullish Coalescing Operator - Operador de fusión nula)
+
+El operador `??` devuelve el operando de la derecha solo si el de la izquierda es `null` o `undefined`. Es útil para proporcionar valores predeterminados sin que valores como `0`, `false` o `""` sean considerados nulos.
+
+Ejemplo:
+```js
+let nombre = null;
+let nombrePorDefecto = nombre ?? "Usuario anónimo";
+console.log(nombrePorDefecto); // "Usuario anónimo"
+
+let edad = 0;
+let edadValida = edad ?? 18;
+console.log(edadValida); // 0 (porque 0 no es null ni undefined)
+```
+
+###### Diferencia con `||` (OR lógico):
+
+El operador `||` trata cualquier valor falsy (`false`, `0`, `""`, `null`, `undefined`, `NaN`) como si fuera `false`, mientras que `??` solo considera `null` y `undefined`.
+
+##### `||` (Operador OR lógico)
+
+El operador `||` devuelve el primer valor truthy que encuentre o el último valor evaluado si todos son falsy.
+
+Ejemplo:
+```js
+let usuario = "";
+let usuarioPorDefecto = usuario || "Nombre desconocido";
+console.log(usuarioPorDefecto); // "Nombre desconocido"
+
+let valor = 0;
+let valorValido = valor || 10;
+console.log(valorValido); // 10
+```
+
+##### `!!` (Doble negación - Conversión a booleano)
+
+El operador `!!` convierte cualquier valor en su equivalente booleano, evalua como `false` los valores `falsy`.
+
+Ejemplo:
+
+```js
+console.log(!!1); // true
+console.log(!!0); // false
+console.log(!!"texto"); // true
+console.log(!!""); // false
+console.log(!!null); // false
+console.log(!!undefined); // false
+```
+
+Uso práctico:
+- Verificar si una variable tiene un valor válido (`null`, `undefined`, `0`, `""`, `NaN`, `false` se convierten en `false`).
+- Convertir valores en estrictamente `true` o `false` sin condicionales.
+
+##### Ejemplo combinado
+
+```js
+let valor = null;
+console.log(!!valor); // false
+console.log(valor ?? "Valor por defecto"); // "Valor por defecto"
+```
+
+##### Resumen
+
+- `??` devuelve el primer valor que no sea `null` ni `undefined`.
+- `||` devuelve el primer valor truthy (lo contrario de (`false`, `0`, `""`, `null`, `undefined`, `NaN`))
+- `!!` convierte un valor en su equivalente booleano.
 
 
 ## Angular Basics
@@ -643,7 +748,92 @@ para poder escuchar el evento en el componente padre usaremos la siguiente sinta
 <dbz-add-charcater (onNewCharacter)="addNewCharacter($event)"></dbz-add-charcater>
 ```
 
-con el `$event` capturamos lo que emite el evento, en este caso un objeto tipo Character
+con la palabra reservada `$event` en el html, angular captura el objeto evento. Este objeto puede ser diferente en función de como implementemos el `EventEmitter`. 
+
+Por ejemplo si usamos $event en un evento built-in de angular como `click` o `keyup.enter`   capturamos el evento construido por angular siempre tiene la misma estructura dependiendo de qué acción lo genere:
+
+1. Eventos de mouse (click, mousedown, mouseup, etc.) tienen propiedades como clientX, clientY, target, entre otros.
+
+2. Eventos de teclado (keydown, keyup) incluyen propiedades como key, code, target, altKey, shiftKey, etc.
+
+3. Eventos de formularios (como input o change) contienen el valor del formulario, como target.value.
+
+```html
+<input type="text"
+  name = "value"
+  [placeholder]="placeholder"
+  class="form-control"
+  (keyup.enter)="test($event)"
+>
+```
+
+en este caso capturo un evento de teclado pero para ello podemos usar la class genérica `Event` en el .ts
+
+```javascript
+@Component({
+  selector: 'search-box',
+  templateUrl: './search-box.component.html'
+})
+export class SearchBoxComponent {
+
+  @Input() public placeholder:string = '';
+  @Output() public inputData = new EventEmitter<string>()
+
+  test(event:Event){
+
+    console.log(event) // keyboardevent
+    console.log((event.target as HTMLInputElement).value) // valor del input
+
+
+
+  }
+}
+
+/*
+desde el evento pùedo acceder al target q es un input pero para acceder al valor del input tengop q transformarlo en un HTMLInputElement
+*/
+
+```
+
+Ahora bien cuando yo genero un evento propio le digo de qué tipo va a ser ese evento en la declaración del `output`
+
+```javascript
+  @Output() public inputData: EventEmitter<string> =  new EventEmitter()
+
+  test(event:Event){
+
+    let data = (event.target as HTMLInputElement).value
+
+    this.inputData.emit(data)
+
+  }
+
+```
+
+ahora cuando tengo q recoger ese evento en mi componente padre la funcion debe aceptar un string entonces desde el html del padre
+capturamos el evento `inputData` y asociamos a la funcion encargada de gestionar el evento
+
+```html
+
+<search-box
+  [placeholder]="'By Capital'"
+  (inputData) = "onInputValue($event)">
+</search-box>
+
+```
+y en .ts 
+
+```javascript
+export class ByCapitalPageComponent {
+
+  onInputValue(event:string){
+    console.log('desde by-capital', event);
+  }
+}
+
+```
+
+
 
 
 ## Servicios
@@ -821,13 +1011,1030 @@ pero no veremos nada xq mi app busca los archivos en el root de la app pero gith
 
 ![not found](img/7-11.png)
 
-necesitamos entrar en el index.html de docs y añadir este nombre al path
+necesitamos entrar en el index.html de docs y en el `href`de la web añadir un punto para q el path sea relativo al directorio dnd se encuentre 
+
+![not found](img/7-12.png)
+
+y asi tenemos nuestra app corriendo en github pages
+
+El inconveniente de esto es q cada vez q hagamos un build tenemos q añadir los archivos manualmente y cambiar el href. Para evitarnos esto vamos a hacer uso de los scripts q nos permite `package.json`. 
+
+Primero instalaremos una nueva dependencia de desarrollo 
+
+`npm i del-cli --save-dev` esta libreria nos permite borrar directorios independientemente de nuestro sistema operativo mediante script
+`npm i copyfiles --save-dev` nos permite copiar directorios en distintos SSOO.
+
+y añadimos estos scripts 
+
+![not found](img/7-13.png)
+
+
+```javascript
+    "build:href": "ng build --base-href ./",
+    "delete:docs": "del --force /home/david-easo/cursos/angular-course/docs",
+    "copy:dist": "copyfiles dist/bases/browser/* /home/david-easo/cursos/angular-course/docs -f",
+    "build:github":"npm run delete:docs && npm run build:href && npm run copy:dist"
+```
+
+## GifsApp Project
+
+### @ViewChild / @ViewChildren decorator
+
+Nos permite tomar una referencia local a un elemento del HTML, si para esa referencia usamos un id (myId) `<p #myId>un parrafo cualquiera</p>` usaremos ViewChild pq nos devuelve un único elemento, si por ejemplo usamos como referencia una clase o un tag html q nos puede devolver más de un elemento usaremos ViewChildren q guardaremos un array con todos los objetos 
+
+por ejemplo 
+
+1. en nuestro HTMNL tenemos un input q para no usar ngModel solo para este elemento le damos un id y cogemos su valor y cuando se emita el evento `keyup.enter` q es cuando apretemos enter dentro del input se ejecuta la función searchTag poasandole el valor del input
+
+```html
+<h5>Buscar</h5>
+
+<input 
+  #txtInput 
+  (keyup.enter)="searchTag(txtInput.value)" 
+  type="text" 
+  class="form-control" 
+  placeholder="Buscar gifts...">
+
+```
+
+
+```javascript
+import { Component } from '@angular/core';
+
+@Component({
+  selector: 'search-box',
+  templateUrl: './search-box.component.html',
+  styleUrl: './search-box.component.css'
+})
+export class SearchBoxComponent {
+
+  constructor(){}
+
+  searchTag(newTag:string){
+    console.log({newTag});
+  }
+}
+
+```
+
+Este ejercicio se puede simplificar con ViewChild, ya que creo una referencia a ese elemento html y puedo tener su valor al instante
+
+
+```HTML
+<h5>Buscar</h5>
+
+<input 
+  #txtInput 
+  (keyup.enter)="searchTag()" 
+  type="text" 
+  class="form-control" 
+  placeholder="Buscar gifts...">
+
+```
+
+ya no hace falta q ponga el value como argumento de la funcion (txtInput.value) y en el TS
+
+
+```javascript
+
+import { Component, ElementRef, ViewChild } from '@angular/core';
+
+@Component({
+  selector: 'search-box',
+  templateUrl: './search-box.component.html',
+  styleUrl: './search-box.component.css'
+})
+export class SearchBoxComponent {
+
+  @ViewChild('txtInput')
+  public tagInput!: ElementRef<HTMLInputElement>;
+
+  constructor(){}
+
+  searchTag(){
+    console.log(this.tagInput.nativeElement.value);
+
+  }
+
+}
+
+```
+
+hay otro decorador llamado `ViewChildren()`q nos permite recoger más de un elemento.
+
+### Persistencia de datos en el navegador
+
+1. Local Storage (aprox 50MB)
+   1. es persistente aunq cierres el navegador o refresques
+2. Session Storage(aprox 50MB)
+   1. persiste el refresh pero si cierras el navegador se pierden los datos
+3. Cookies(aprox 4 kb)
+   1. son utilizadas para comunicar front y backend, asi q en cada petición http se mandan las cookies al backend
+   2. Las cookies pueden ser persistentes o temporales. Si una cookie es persistente, se almacenará hasta que caduque o sea eliminada, incluso si el navegador se cierra.
+4. IndexedDB
+   1. es una base de datos transaccional en el navegador que puede almacenar grandes cantidades de datos de manera persistente, incluso si el navegador se cierra.
+   2. Se utiliza para almacenar datos complejos o grandes, como archivos, imágenes, o estructuras de datos que no pueden almacenarse fácilmente en localStorage o sessionStorage. Es especialmente útil en aplicaciones que requieren trabajar offline o almacenar grandes volúmenes de datos.
+
+Vamos a almacenar el hiostorial y los Gifs en el localStorage
+
+
+### Image Loader
+
+El spiner lo sacamos de un repo de svg 
+
+Para cargar el spinner o la imagen usamos el evento de imagenes `(load)` y el `display `
+
+```js
+<div class="d-flex justify-content-center">
+  <img
+  [src]="url"
+  [alt]="alt"
+  class="card-img-top"
+  (load)="onLoad()"
+  [ngStyle]="{display: hasLoaded? '' : 'none'}"
+  />
+
+  <img
+  *ngIf="!hasLoaded"
+  src="loader.svg"
+  class="mt-3"
+  alt="">
+</div>
+
+```
+
+
+## Country-SPA APP 
+
+
+En esta app utilizaremos la `lazy load` de componentes y cuando hacerlo. El lazy load tiene como obkjetivo evitar 
+cargar componentes que no vayamos a utilizar con lo q relentizaria la app. El lazy load lo podemos aplicar a cualquier módulo 
+que queramos así en esta app tendremos un módulo `shared`, el q cargaremos de manera tradicional y un módulo `countries`que cargaremos 
+con lazy loading.
+
+El módulo q cargaremos de modo tradicional debemos importarlo en el `app.module.ts` esto es xq necesitamos q a lo largo de toda nuestra aplicación
+tengamos disponible los componentes comunes.
+
+
+
+### Routing básico - RouterLink / RouterLinkOptions
+
+EN la raíz de nuestra app tenemos que tener un archivo llamado `app-routing.module.ts` este será nuestro router principal y tenemos q añadir 
+las rutas del siguiente modo
+
+```javascript
+// app-routing.module.ts
+
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+
+import { HomePageComponent } from './shared/pages/home-page/home-page.component';
+import { AboutPageComponent } from './shared/pages/about-page/about-page.component';
+
+const routes: Routes = [
+  {
+    path:'home',
+    component: HomePageComponent
+  },
+  {
+    path:'about',
+    component: AboutPageComponent
+  },
+  {
+    path:'**',
+    redirectTo: 'home'
+  }
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+
+
+```
+En los imports importamos el  `RouterModule` le tenemos q cargar las rutas que hemos definido para ello usamos el método `forRoot()` ya que este será nuestro router principal, la otra alternativa es `forChild()` para routers secundarios o rutas anidadas. 
+
+En los exports lo exportamos tb para q cuando importemos el modulo en el app.module.ts nos funcione.
+
+
+```javascript
+// app.module.ts
+
+import { NgModule } from '@angular/core';
+import { BrowserModule } from '@angular/platform-browser';
+
+import { AppRoutingModule } from './app-routing.module';
+import { AppComponent } from './app.component';
+import { SharedModule } from './shared/shared.module';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    SharedModule,
+  ],
+  providers: [],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+
+```
+Finalmente el último paso q necesitamos completar es posicionar la etiqueta `<router-outlet>` en el lugar dnd queremos renderizar esos componentes
+
+
+```html
+<div class="row mt-4">
+  <div class="col-3">
+    sidebar
+  </div>
+  <div class="col">
+    <router-outlet></router-outlet>
+  </div>
+</div>
+
+```
+
+entonces dentro de ese div es dnd se cargaran los componentes en función de la url.
+
+
+Ahora para poder utilizar las rutas debemos añadir la propiedad `routerLink` al elemento htmnl q queramos para q funcione como un link
+
+
+Para q esta propiedad sea aceptada por el elemento html debemos importar en nuestro módulo el `RouterModule`
+
+Finalmente nos puede interesar resaltar el elemento seleccionado para saber que nos encontramos en esa ruta para ello usaremos otra propiedad llamada `routerLinkActive` q nos permite aplicarle una clase css como es el caso de active q es una clase de bootstrap
+
+
+Ahora podemos añadir más propiedades importantes heredadas de router como `routerLinkActiveOptions` dnd le indicaremos que solo acepte las rutas con el path exacto para aplicarle las clases de manera adecuada 
+
+
+```html
+<h2>Paises</h2>
+
+<hr>
+
+<ul class="list-group">
+  <li
+      routerLink="home"
+      routerLinkActive="active"
+      class="list-group-item">
+        Home Page
+  </li>
+  <li
+      routerLink="about"
+      routerLinkActive="active"
+      [routerLinkActiveOptions]="{exact: true}"
+      class="list-group-item">
+        About
+  </li>
+
+</ul>
+
+```
+Esta es la configuración clásica del router de angular:
+
+1. creamos un modulo
+2. lo importamos en el app.module
+3. añadimos la ruta en el archivo app-routing.module
+
+esto es útil para aquellos módulos que deben estar presentes siempre en nuestra app como por ejemplo una navbar pero luego hay otros módulos q no son necesarios de inicio y para ellos usaremnos un `lazy routing` estos módulos no los tenemos que importar en el app.module (xq no se cargaran de inicio con la app) sino que se cargarán solo cuando accedamos a su url.
+
+### LazyLoad
+
+Los módulos que vayan a hacer uso del LazyLoad tienen q declarar las rutas en un `nombre_modulo-routing.module.ts` propio del módulo
+
+entonces nuestro modulo tendrá este aspecto:
+
+```javascript
+
+/*
+
+countries-routing.module.ts
+
+*/
+import { Component, NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { ByCapitalPageComponent } from './pages/by-capital-page/by-capital-page.component';
+import { ByCountryPageComponent } from './pages/by-country-page/by-country-page.component';
+import { ByRegionPageComponent } from './pages/by-region-page/by-region-page.component';
+import { CountryPageComponent } from './pages/country-page/country-page.component';
+
+const routes:Routes = [
+
+  {
+    path: '',
+    redirectTo:'/',
+    pathMatch:'full'
+  },
+  {
+    path:'by-capital',
+    component: ByCapitalPageComponent
+  },
+  {
+    path:'by-country',
+    component:ByCountryPageComponent
+  },
+  {
+    path:'by-region',
+    component:ByRegionPageComponent
+  },
+  {
+    path:'by/:id',
+    component: CountryPageComponent
+  }
+
+
+]
+
+
+@NgModule({
+  imports: [RouterModule.forChild(routes)],
+  exports: [RouterModule],
+})
+export class CountriesRoutingModule { }
+
+
+```
+
+la primera ruta es por si ponen solo el prefijo `countries` q lo redirija al inicio de la app.
+
+la única diferencia con el anterior es q al ser un routing de un módulo el RouterMOdule tiene q ir con `forChild` es decir `RouterModule.forChild(routes)` 
+
+Seguidamente este nuevo routing-module tiene q ser importtado en el archivo .module de su propio modulo 
+
+```javascript
+
+/*
+
+countries.module.ts
+
+*/
+
+import { NgModule } from '@angular/core';
+import { CommonModule } from '@angular/common';
+import { ByCapitalPageComponent } from './pages/by-capital-page/by-capital-page.component';
+import { ByCountryPageComponent } from './pages/by-country-page/by-country-page.component';
+import { ByRegionPageComponent } from './pages/by-region-page/by-region-page.component';
+import { CountryPageComponent } from './pages/country-page/country-page.component';
+import { CountriesRoutingModule } from './countries-routing.module';
+
+
+
+@NgModule({
+  declarations: [
+    ByCapitalPageComponent,
+    ByCountryPageComponent,
+    ByRegionPageComponent,
+    CountryPageComponent
+  ],
+  imports: [
+    CommonModule,
+    CountriesRoutingModule,
+
+  ]
+})
+export class CountriesModule { }
+```
+
+Finalmente tengo q decirle a angular q cuando se acceda a estas rutas cargue todo este módulo, esto es la carga perezosa o `lazyload` para ello en el archivo `app-routing.module.ts` añado este path.
+
+```javascript
+
+
+/*
+app-routing.module.ts
+*/
+
+
+import { NgModule } from '@angular/core';
+import { RouterModule, Routes } from '@angular/router';
+import { HomePageComponent } from './shared/pages/home-page/home-page.component';
+import { AboutPageComponent } from './shared/pages/about-page/about-page.component';
+import { ContactPageComponent } from './shared/pages/contact-page/contact-page.component';
+import { CountriesModule } from './countries/countries.module';
+
+const routes: Routes = [
+  {
+    path:'',
+    component: HomePageComponent
+  },
+  {
+    path:'about',
+    component: AboutPageComponent
+  },
+  {
+    path:'contact',
+    component:ContactPageComponent
+  },
+  {
+    path: 'countries',
+    loadChildren:() => import('./countries/countries.module').then( m => m.CountriesModule)
+  },
+  {
+    path:'**',
+    redirectTo: ''
+  }
+];
+
+@NgModule({
+  imports: [RouterModule.forRoot(routes)],
+  exports: [RouterModule]
+})
+export class AppRoutingModule { }
+```
+
+### Reutilizacion de componentes
+
+Vamos a hacer un input con propiedades especiales para que lo podamos reutilizar en otros components
+
+Para ello creamos en el modulo `shared` un componente `search-box` que tendrá este aspecto
+
+```html
+<!-- HTML -->
+
+<input type="text"
+  [placeholder]="placeholder"
+  class="form-control"
+>
+
+```
+vemos que la propiedad placeholder viene del padre
+
+```javascript
+import { Component, Input } from '@angular/core';
+
+@Component({
+  selector: 'search-box',
+  templateUrl: './search-box.component.html'
+})
+export class SearchBoxComponent {
+
+  @Input() public placeholder:string = '';
+
+}
+
+```
+Su .ts tiene un input para recibir los datos del padre
+
+Ahora para q este componente este disponible hay q ir al sharedModule y ponerlo en la sección de exports
+
+```javascript
+@NgModule({
+  declarations: [
+    AboutPageComponent,
+    HomePageComponent,
+    SidebarComponent,
+    ContactPageComponent,
+    SearchBoxComponent,
+  ],
+  imports: [
+    CommonModule,
+    RouterModule,
+  ],
+  exports:[
+    AboutPageComponent,
+    HomePageComponent,
+    SidebarComponent,
+    ContactPageComponent,
+    SearchBoxComponent,
+  ]
+})
+export class SharedModule { }
+
+```
+ahora podemos importar este modulo entero en otros módulos para poder hacer uso de todos sus exports entre ellos del searchbox
+
+```html
+
+ <search-box 
+  [placeholder]="'By Capital'"
+></search-box>
+
+```
+podemos pasarle los datos del placeholder así o con una variable o si sabemos q siempre será un string podemos hacerlo así, quitamos los []:
+
+```html
+
+ <search-box 
+  placeholder="By Capital"
+></search-box>
+
+```
+
+### Service for countries
+
+Como estamos en angular 18 pero trabajando con modulos (standalone = false) tenemos q hacer la importacion del módulo HttpClientModue pero este nos da deprecated por lo q ahora en Ang18 debemos usar el provider `provideHttpClient` para ello en el `app.module.ts`debemos especificarlo en la sección de providers
+
+```javascript
+import { provideHttpClient } from '@angular/common/http';
+
+@NgModule({
+  declarations: [
+    AppComponent
+  ],
+  imports: [
+    BrowserModule,
+    AppRoutingModule,
+    SharedModule,
+
+  ],
+  providers: [provideHttpClient()],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+
+```
+
+### Capturar error en las llamadas http
+
+Podemos capturar el error en el servicio y hacer q devuelva lo q nosotros queramos con la combinación de los operadores `pipe`y `of()`q devuelve un observable con el valor q necesitemos
+
+```javascript
+  serachCapital(term:string):Observable<Country[]>{
+    return this.httpClient.get<Country[]>(`${this.api_url}/capital/${term}`)
+      .pipe(
+        catchError( error => {
+          console.log(error);
+
+          return of([])
+        })
+      )
+
+  }
+```
+### Leer argumentos de la url
+
+Para poder acceder a los arguemntos de la url en angular usaremos un observavble `activatedRoute` por si cambia dinámicamente siempre tener la última versión.
+
+Una vez tenemos el id del pais hacemos una llamada al servicio para recuperar los datos del país.
+
+
+```javascript
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute } from '@angular/router';
+import { CountryService } from '../../services/country.service';
+
+@Component({
+  selector: 'app-country-page',
+  templateUrl: './country-page.component.html',
+  styleUrl: './country-page.component.css'
+})
+export class CountryPageComponent implements OnInit{
+
+  constructor( private activatedRoute:ActivatedRoute, private countriesService: CountryService){}
+
+  ngOnInit(): void {
+
+    this.activatedRoute.params.subscribe(({id})=>{
+      console.log(id);
+
+      this.countriesService.serachCountryByALphaCode(id)
+      .subscribe(country=>{
+        console.log(country);
+
+      })
+
+    })
+
+  }
+}
+
+```
+
+En el ejemplo veremos que se nos genera un "observable hell" q es un observable dentro de otro para solventar esto podemos usar `switchMap`. Basicamente recibe el valor anterior y devuelve un nuevo observable.
+
+```javascript
+
+  ngOnInit(): void {
+
+    this.activatedRoute.params
+    .pipe(
+      switchMap( params => this.countriesService.serachCountryByALphaCode(params['id']))
+    )
+    .subscribe({
+      next:(country)=>{
+        console.log('entra al next',country)
+      }
+    })
+  }
+
+```
+
+
+## 🔹 RxJS en Angular
+
+### ¿Qué es un Observable?
+Un **Observable** es una fuente de datos que emite valores en el tiempo. Puede manejar eventos, peticiones HTTP, formularios, etc., y puede ser **asíncrono**.
+
+```typescript
+const observable = new Observable(observer => {
+  observer.next('Hola');
+  observer.complete();
+});
+```
+
+---
+
+### Suscripción a un Observable
+Para recibir los valores emitidos, es necesario **suscribirse** al Observable.
+
+```typescript
+observable.subscribe({
+  next: value => console.log(value), // Recibe valores
+  error: err => console.error(err),  // Maneja errores
+  complete: () => console.log('Completado') // Se ejecuta al finalizar si todo ha ido bien
+});
+```
+
+⚠️ **Importante:** La suscripción debe **desuscribirse** (`unsubscribe()`) para evitar memory leaks.
+
+---
+
+### Uso de `.pipe()`
+`.pipe()` permite **encadenar operadores RxJS** para transformar, filtrar y manejar los datos.  
+**Siempre devuelve otro Observable**, lo que permite seguir operando sobre él antes de suscribirse.
+
+```typescript
+this.http.get<User[]>(url)
+  .pipe(
+    map(users => users.filter(user => user.active)), // Transforma datos
+    tap(users => console.log(users)), // Efecto secundario, mo afecta a los datos
+    catchError(error => of([])), // Manejo de error
+    finalize(() => console.log('Finalizado')) // Se ejecuta siempre, con o sin error
+  )
+  .subscribe(users => console.log(users));
+```
+
+---
+
+### Operadores comunes en `.pipe()`
+
+### **Transformación de Datos**
+- **`map(fn)`**: Transforma cada valor emitido por el Observable.  
+  **Caso de uso:** Cuando queremos obtener solo ciertas propiedades de los datos.
+  ```typescript
+  this.http.get<User[]>(url).pipe(
+    map(users => users.map(user => user.name)) // Extrae solo nombres
+  );
+  ```
+- **`pluck('prop')`**: Extrae una propiedad específica de cada objeto emitido.  
+  **Caso de uso:** Cuando trabajamos con datos anidados y solo necesitamos un campo.
+  ```typescript
+  users$.pipe(pluck('name')); // Obtiene solo la propiedad 'name'
+  ```
+- **`scan(fn, seed)`**: Acumula valores como `reduce()`, pero emite en cada iteración.  
+  **Caso de uso:** Para contar eventos, como clics del usuario.
+  ```typescript
+  clicks$.pipe(scan((count, _) => count + 1, 0));
+  ```
+
+---
+
+### **Efectos Secundarios**
+- **`tap(fn)`**: Ejecuta efectos secundarios sin modificar los datos.  
+  **Caso de uso:** Para hacer logs, mostrar mensajes o actualizar el estado de la aplicación sin alterar los datos.
+  ```typescript
+  this.http.get<User[]>(url).pipe(
+    tap(users => console.log('Usuarios obtenidos:', users)), // Log en consola
+    tap(() => this.showSuccessMessage('Datos cargados correctamente'))
+  );
+  ```
+- **`finalize(fn)`**: Se ejecuta siempre, sin importar si el Observable se completó o falló.  
+  **Caso de uso:** Cerrar un loader o limpiar recursos después de una petición.
+  ```typescript
+  this.http.get(url).pipe(
+    finalize(() => console.log('Finalizado')) // Se ejecuta siempre
+  );
+  ```
+
+---
+
+### **Filtrado de Valores**
+- **`filter(fn)`**: Deja pasar solo los valores que cumplan la condición.  
+  **Caso de uso:** Para mostrar solo los usuarios activos.
+  ```typescript
+  users$.pipe(filter(user => user.active));
+  ```
+- **`distinctUntilChanged()`**: Evita emitir valores repetidos.  
+  **Caso de uso:** Evitar llamadas repetitivas a una API cuando el usuario ingresa el mismo valor en un formulario.
+  ```typescript
+  search$.pipe(distinctUntilChanged());
+  ```
+
+---
+
+### **Manejo de Errores**
+- **`catchError(fn)`**: Captura errores y devuelve un valor alternativo.  
+  **Caso de uso:** Evitar que un fallo en la API rompa la aplicación.
+  ```typescript
+  this.http.get(url).pipe(
+    catchError(error => {
+      console.error(error);
+      return of([]); // Retorna un array vacío en caso de error
+    })
+  );
+  ```
+- **`retry(n)`**: Reintenta `n` veces en caso de error antes de fallar.  
+  **Caso de uso:** Intentar recuperar datos en caso de errores intermitentes en la red.
+  ```typescript
+  this.http.get(url).pipe(retry(3)); // Reintenta hasta 3 veces
+  ```
+
+---
+
+### Conclusión
+Los **Observables** son esenciales en Angular para manejar datos asíncronos.  
+El uso de **`.pipe()`** permite procesar datos de manera declarativa y encadenada.  
+**RxJS ofrece múltiples operadores** para transformar, filtrar y combinar datos.
+
+ **Usar RxJS correctamente optimiza el rendimiento y evita problemas de memoria.**
+
+
+### Mejoras de nuestra Country-SPA app
+
+#### Refactor del service
+
+Vemos q en nuestro servico hay una parte q se repite constantemente 
+
+```javascript
+      .pipe(
+        catchError( error => {
+          console.log(error);
+
+          return of([])
+        })
+      )
+```
+
+para evitar esta repetición crearemos una metodo private 
+
+```javascript
+  private geCountriesRequest(url:string):Observable<Country[]>{
+
+    return this.httpClient.get<Country[]>(url)
+    .pipe(
+      catchError( error => of([])),
+      delay(2000)
+    )
+
+  }
+```
+
+y lo usaremos en las llamadas como por ejemplo:
+
+```javascript
+  serachCapital(term:string):Observable<Country[]>{
+
+    const url = `${this.api_url}/capital/${term}`
+    return this.geCountriesRequest(url)
+
+  }
+```
+
+#### uso de debounce
+
+Este operador que podemos usar dentro del .pipe() nos permite retrasar la acción por ejemplo muy últil en inputs. Podemos hacer que se lance una petición http a medida q el usuario va escribiendo pero para evitar lanzar peticiones innecesarias al servidor solo haremos la consulta cuando haya pasado un tiempo en el q el usuario no ha escrito
+
+1. Creamos un observable manualmente con `Subject`
+2. cuando se da el evento de `keyup` le pasaremos a este subject el valor
+3. nos suscribimos al subject pero con un debounce q retrasa la emisión del evento de busqueda
+
+```html
+  <input type="text"
+    name = "value"
+    [placeholder]="placeholder"
+    class="form-control"
+    (keyup)="onKeyPress(txtInput.value)"
+    #txtInput
+  >
+
+```
+
+```javascript
+@Component({
+  selector: 'search-box',
+  templateUrl: './search-box.component.html'
+})
+export class SearchBoxComponent implements OnInit {
+
+  
+  @Input() public placeholder:string = '';
+  @Output() public inputData_from_debounce: EventEmitter<string> =  new EventEmitter()
+  @ViewChild('txtInput') public input! : ElementRef<HTMLInputElement>
+
+  private debouncer = new Subject<string>()
+
+  
+  
+  ngOnInit(): void {
+    this.debouncer
+    .pipe(
+      debounceTime(500)
+    )
+    .subscribe(value=>{
+  
+      this.inputData_from_debounce.emit(value)
+
+    })
+  }
+
+  onKeyPress(searchTerm:string){
+
+    this.debouncer.next(searchTerm)
+
+  }
+}
+```
+
+#### Limpieza de suscripciones
+
+
+Todas las suscripciones deberían ser eliminadas excepto en los servicios. El motivo es pq aunque el componente se destuya la suscrpción se mantendrá activa.
+Para poder eliminar suscripciones implementaremos `onDestroy` que indica q cada vez q se destruya un componente eliminaremos las distintas suscripciones eso me permitirá liberar memoria de mi app.
+
+```javascript
+import { Component, ElementRef, EventEmitter, Input, OnDestroy, OnInit, Output, ViewChild } from '@angular/core';
+import { CountryService } from '../../../countries/services/country.service';
+import { debounceTime, Subject, Subscription } from 'rxjs';
+
+
+
+@Component({
+  selector: 'search-box',
+  templateUrl: './search-box.component.html'
+})
+export class SearchBoxComponent implements OnInit, OnDestroy {
+
+
+  private debouncer = new Subject<string>()
+  private debouncerSubscription? : Subscription;
+
+  @Output() public inputData_from_debounce: EventEmitter<string> =  new EventEmitter()
+
+  ngOnInit(): void {
+
+    this.debouncerSubscription = this.debouncer
+    .pipe(
+      debounceTime(500)
+    )
+    .subscribe(value=>{
+      console.log('desde el debounce', value);
+      this.inputData_from_debounce.emit(value)
+
+    })
+  }
+
+  ngOnDestroy(): void {
+    this.debouncerSubscription?.unsubscribe()
+
+  }
+}
+
+```
+
+#### persistir datos entre pantallas
+
+El motivo por el que al cambiar de pantalla perdemos los datos es xq se destruye el componente y se crrea de nuevo, para evitar perder los datos podemos usar diferentes estrategias:
+
+1. service => se instancia una vez al iniciar la app por lo q entre pantallas persiste pero si reiniciamos nuestro navegadir se destruye y se vuelve a crear perdiendo todos los datos almacenados en él.
+
+Utilizando el `tap()` podemos interceptar la respuesta y rellenar ese objeto `cacheStore` del servicio.
+
+```javascript
+
+@Injectable({providedIn: 'root'})
+export class CountryService {
+
+  private api_url:string = 'https://restcountries.com/v3.1'
+
+  public cacheStore : cacheStore = {
+    byCapital : { term:'', countries : []},
+    byCountries : { term:'', countries : []},
+    byRegion : { region:'', countries : []},
+  }
+
+  constructor(private httpClient: HttpClient) { }
+
+  private geCountriesRequest(url:string):Observable<Country[]>{
+
+    return this.httpClient.get<Country[]>(url)
+    .pipe(
+      catchError( error => of([])),
+    )
+
+  }
+
+
+  serachCountryByALphaCode(code:string):Observable<Country | null>{
+
+    return this.httpClient.get<Country[]>(`${this.api_url}/alpha/${code}`)
+      .pipe(
+        map(countries=> countries.length>0 ? countries[0] : null),
+        catchError( error => {
+          return of(null)
+        })
+      )
+
+  }
+}
+
+```
+y en el componente solo tenemos que recuperar los datos del service
+
+```javascript
+export class ByCountryPageComponent implements OnInit {
+
+  public countryList:Country[] = []
+  public initialvalue:string='';
+
+
+  constructor(private _countriesService : CountryService){}
+
+  ngOnInit(): void {
+
+    this.countryList = this._countriesService.cacheStore.byCountries.countries
+    this.initialvalue = this._countriesService.cacheStore.byCountries.term
+  }
+
+  onDataInput(country:string){
+
+    this._countriesService.serachCountry(country)
+    .subscribe(data=> this.countryList = data)
+
+  }
+
+}
+
+```
+
+
+
+1. localSstorage => fuera del ciclo de vida de angular
+
+Tal como esta actualmente si refrecamos perderemos los datos para evitarlo usaremos localstorage. Para conseguirlo solo tenemos q crear los metodos que controles el guardado y la carga del localstorage
+
+
+```javascript
+  private saveToLocalStorage(){
+
+    localStorage.setItem('cacheStore',JSON.stringify(this.cacheStore))
+
+  }
+  private loadToLocalStorage(){
+
+    if(!localStorage.getItem('cacheStore')) return
+    this.cacheStore = JSON.parse(localStorage.getItem('cacheStore')!)
+  }
+```
+
+y luego en cada llamada q hagamos q modificamos los datos sobreescribir el objeto 
+
+```javascript
+  serachCapital(term:string):Observable<Country[]>{
+
+    const url = `${this.api_url}/capital/${term}`
+    return this.geCountriesRequest(url)
+                .pipe(
+                  tap( countries => this.cacheStore.byCapital = { term, countries}  ),
+                  tap(() => this.saveToLocalStorage()),
+
+                )
+
+  }
+```
+
+y cargammos los datos en el constructor
+
+```javascript
+
+  constructor(private httpClient: HttpClient) {
+    this.loadToLocalStorage()
+   }
+
+```
+
+
+## Uso de pipes y PrimeNG
 
 
 
 
 
 <!-- ::::::::::::::::::::::::::::::::::::::::::::::::::::::::: -->
+
+
+
+
+
+
+
 
 
 # Frontend con Angular - platzi
