@@ -38,7 +38,7 @@ export class AppComponent {
   }
 
   ngOnDestroy(): void {
-    //this.stopCamera();
+    this.stopCamera();
   }
 
   async initCamera() {
@@ -96,10 +96,10 @@ export class AppComponent {
   }
 
   stopCamera() {
-    // if (this.stream) {
-    //   this.stream.getTracks().forEach((track) => track.stop());
-    //   this.stream = null;
-    // }
+    if (this.stream) {
+      this.stream.getTracks().forEach((track) => track.stop());
+      this.stream = null;
+    }
   }
 
 
