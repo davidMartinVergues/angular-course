@@ -1,0 +1,25 @@
+<h2>Por capital</h2>
+<hr>
+
+<div class="row">
+  <div class="col">
+    <search-box
+      [initialvalue] = "initialvalue"
+      [placeholder]="'By Capital'"
+      (inputData) = "onInputValue($event)"
+      (inputData_from_debounce)="onInputValue($event)"
+      ></search-box>
+
+  </div>
+</div>
+
+
+<div class="row">
+  <div class="col">
+    <hr>
+    <loading-spinner *ngIf="isLoading"></loading-spinner>
+    <hr>
+    <countries-table [countryList]="countryList"></countries-table>
+
+  </div>
+</div>

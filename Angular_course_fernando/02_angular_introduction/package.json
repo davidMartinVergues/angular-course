@@ -1,5 +1,9 @@
 {
   "devDependencies": {
     "@angular/cli": "^18.2.8"
+  },
+  "dependencies": {
+    "@primeng/themes": "^19.0.9",
+    "primeng": "^19.0.9"
   }
 }

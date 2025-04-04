@@ -1,0 +1,12 @@
+
+  <input type="text"
+    name = "value"
+    [placeholder]="placeholder"
+    class="form-control"
+    (keyup.enter)="onSearchBoxText($event)"
+    (keyup.enter)="onSearchBoxText2(txtInput.value)"
+    (keyup)="onKeyPress(txtInput.value)"
+    [value]="initialvalue"
+    #txtInput
+  >
+

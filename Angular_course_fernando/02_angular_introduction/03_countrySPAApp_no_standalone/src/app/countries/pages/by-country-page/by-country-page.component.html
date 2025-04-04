@@ -1,0 +1,19 @@
+
+<h1>By Country</h1>
+<hr>
+<div class="row">
+  <div class="col">
+    <search-box
+      placeholder="By Country"
+      (inputData_from_debounce)="onDataInput($event)"
+      [initialvalue]="initialvalue"
+      >
+    </search-box>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col">
+    <countries-table [countryList]="countryList" ></countries-table>
+  </div>
+</div>

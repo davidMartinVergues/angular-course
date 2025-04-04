@@ -1,0 +1,53 @@
+<div class="mt-5">
+  <table
+    mat-table
+    [dataSource]="dataSource"
+    class="mat-elevation-z8 table table-hover"
+    matSort
+    matSortActive="population"
+    matSortDirection="asc"
+  >
+    <!-- Capital Column -->
+    <ng-container matColumnDef="Identificador">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> # </th>
+      <td mat-cell *matCellDef="let country; let i = index"> {{ i +1 }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="icon">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> icon </th>
+      <td mat-cell *matCellDef="let country"> {{ country.flag }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="capital">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Capital </th>
+      <td mat-cell *matCellDef="let country"> {{ country.capital }} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="img">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Img </th>
+      <td mat-cell *matCellDef="let country"> <img src="{{ country.flags.svg }} " alt="{{ country.name.common}}"></td>
+    </ng-container>
+
+    <!-- Population Column -->
+    <ng-container matColumnDef="population">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> Population </th>
+      <td mat-cell *matCellDef="let country"> {{ country.population | number}} </td>
+    </ng-container>
+
+    <ng-container matColumnDef="link">
+      <th mat-header-cell *matHeaderCellDef mat-sort-header> link </th>
+      <td mat-cell *matCellDef="let country"> <a [routerLink]="['/countries/by', country.cca3]">See more</a> </td>
+    </ng-container>
+
+    <tr mat-header-row *matHeaderRowDef="displayedColumns"></tr>
+    <tr mat-row *matRowDef="let row; columns: displayedColumns;"></tr>
+  </table>
+
+  <!-- Mensaje de advertencia si no hay datos -->
+   @if (countryList.length == 0) {
+     <div class="alert alert-warning text-center mt-3">
+       No countries found
+     </div>
+
+   }
+</div>

@@ -58,6 +58,8 @@
       - [Limpieza de suscripciones](#limpieza-de-suscripciones)
       - [persistir datos entre pantallas](#persistir-datos-entre-pantallas)
   - [Uso de pipes y PrimeNG](#uso-de-pipes-y-primeng)
+    - [instalacion primeNG](#instalacion-primeng)
+    - [DatePipe](#datepipe)
 - [Frontend con Angular - platzi](#frontend-con-angular---platzi)
   - [Curso de Angular 17: Creación de Aplicaciones Web - platzi](#curso-de-angular-17-creación-de-aplicaciones-web---platzi)
     - [Instalaciones](#instalaciones)
@@ -2022,6 +2024,104 @@ y cargammos los datos en el constructor
 
 
 ## Uso de pipes y PrimeNG
+
+Podemos concatenar pipes, de tal modo que el resultado de uno se lo pasa al siguinete.
+
+```html
+
+<h1>{{ name | slice:0:5 | titlecase}}...</h1> David ...
+
+```
+
+### instalacion primeNG
+
+1. `npm install primeng @primeng/themes` primng + temas
+2. `npm install primeicons` para icones 
+3. `npm install primeflex` para class helper
+
+### DatePipe
+
+Cambiar el idioma por defecto del datepipe o ir cambiando el idioma segun convenga. 
+
+Para poder trabajar con distintos 'idiomas', gestionar el `locale` tenemos que especificar en el `app.module.ts` o en `main.ts` dependiendo de la version de angular.
+
+
+```javascript
+// main.ts
+
+import localeEs from '@angular/common/locales/es';
+import localeEn from '@angular/common/locales/en';
+
+import { registerLocaleData } from '@angular/common';
+
+registerLocaleData(localeEs);
+registerLocaleData(localeEn);
+
+bootstrapApplication(AppComponent, appConfig)
+  .catch((err) => console.error(err));
+
+```
+
+este modo de hacerlo mantiene el locale por defecto q es el inglés pero me carga tb otros por lo q po ejempo en fechas me permite hacer esto que me pondrá esa fecha es español
+
+```js
+<li>{{customDate | date: 'long' :'':'es-Es'}}</li>
+```
+
+si lo q quiero es poner el idioma español como por defecto en toda mi app debo modificar el `app.config.ts`
+
+```javascript
+import { ApplicationConfig, LOCALE_ID, provideZoneChangeDetection } from '@angular/core';
+
+import localeEs from '@angular/common/locales/es';
+import localeEn from '@angular/common/locales/en';
+
+import { registerLocaleData} from '@angular/common';
+
+registerLocaleData(localeEs);
+registerLocaleData(localeEn);
+
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true }),
+
+    { provide: LOCALE_ID, useValue: 'es' },
+
+
+    provideAnimationsAsync(),  // Agregado correctamente
+    provideRouter(routes),
+    providePrimeNG({ theme: { preset: Aura } }),
+    MessageService
+  ]
+};
+
+```
+para establecer por defecto el idioma en modulos lo hacemos en `app.module.ts`  
+
+```javascript
+// app.module.ts
+
+import { registerLocaleData } from '@angular/common';
+import localeEs from '@angular/common/locales/es';
+import localeEn from '@angular/common/locales/en';
+
+registerLocaleData(localeEs);
+registerLocaleData(localeEn);
+
+@NgModule({
+  declarations: [AppComponent],
+  imports: [BrowserModule],
+  providers: [
+    { provide: LOCALE_ID, useValue: 'es' } // Cambia 'es' a 'en' si deseas inglés
+  ],
+  bootstrap: [AppComponent]
+})
+export class AppModule { }
+```
+
+cargo en las variables `localeEs` y `localeEn` los idipomas  utilizaré y los registro con  `registerLocaleData()` tenemos q tener en cuenta que esto afectará a los pipes : 
+
+
 
 
 
