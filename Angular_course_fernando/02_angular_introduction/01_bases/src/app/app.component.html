@@ -1,6 +1,23 @@
 <h1>Hola Mundo 65465464</h1>
 
 <h1>hola daviiidd</h1>
+
+<div>
+  <video #video autoplay playsinline muted></video>
+  <canvas #canvas hidden></canvas>
+
+  <div class="controls">
+    <button (click)="captureImage()">📸 Tomar foto</button>
+    <button (click)="toggleCamera()">🔄 Cambiar cámara</button>
+  </div>
+
+  <div *ngIf="capturedImage">
+    <h3>Foto capturada:</h3>
+    <img [src]="capturedImage" alt="Imagen capturada" style="max-width: 100%;" />
+  </div>
+</div>
+
+
 <hr>
 <p>{{title}} bienvenidos a Angular 56465</p>
 
