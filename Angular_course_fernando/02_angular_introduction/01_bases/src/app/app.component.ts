@@ -48,7 +48,7 @@ export class AppComponent {
       video: {
         width: { ideal: 640 },
         height: { ideal: 480 },
-        facingMode: {exact: this.useFrontCamera ? 'user' : 'environment'},
+        facingMode: this.useFrontCamera ? 'user' : 'environment',
       },
     };
 
