@@ -1,0 +1,8 @@
+<div class="bg-slate-100 px-4 py-3 shadow-md flex justify-between items-center">
+  <button routerLink="/">
+    {{title()}}
+  </button>
+  <primary-button [label]="'Cart ('+cart_service.cart().length+')'" (btnClicked)="showButtonClicked()"
+    routerLink="/cart">
+  </primary-button>
+</div>

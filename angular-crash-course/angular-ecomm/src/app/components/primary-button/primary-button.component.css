@@ -1,0 +1,19 @@
+button{
+  cursor: pointer;
+}
+.deleteclass {
+  background: linear-gradient(135deg, #ef4444, #dc2626);
+  border-color: #dc2626;
+  padding: 4px 12px;
+  width: auto;
+  display: inline-block;
+  font-size: 14px;
+  transition: all 0.2s ease-in-out;
+  box-shadow: 0 2px 6px rgba(239, 68, 68, 0.2);
+}
+
+.deleteclass:hover {
+  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  box-shadow: 0 3px 8px rgba(239, 68, 68, 0.3);
+  border-color: #b91c1c;
+}

@@ -60,6 +60,9 @@
   - [Uso de pipes y PrimeNG](#uso-de-pipes-y-primeng)
     - [instalacion primeNG](#instalacion-primeng)
     - [DatePipe](#datepipe)
+    - [Number Pipe \& Currency Pipe](#number-pipe--currency-pipe)
+    - [Async pipe](#async-pipe)
+  - [Angular material](#angular-material)
 - [Frontend con Angular - platzi](#frontend-con-angular---platzi)
   - [Curso de Angular 17: Creación de Aplicaciones Web - platzi](#curso-de-angular-17-creación-de-aplicaciones-web---platzi)
     - [Instalaciones](#instalaciones)
@@ -463,11 +466,16 @@ ng new <nombre de la aplicación> --no-standalone
 
 ### Primer proyecto en angular
 
+0. Si lo queremos instalar globalmente 
+
+```
+npm install -g @angular/cli
+```
 1. Primero instalar localmente el cli de angular(para poder tener diferentes verisones de angular en función del proyecto)
 
 `npm install @angular/cli@18 --save-dev`
 
-2. comporbamos q se ha instalado bien (como hemos instalado localmente tenemos q ejecutar todos los comando `ng` precedidos de `npx`)
+2. comprobamos q se ha instalado bien (como hemos instalado localmente tenemos q ejecutar todos los comando `ng` precedidos de `npx`)
 
 `npx ng version`
 
@@ -497,6 +505,8 @@ El resultado es la siguiente estructura de carpetas
 5. entramos dentro del directoria principal de nuestra app (bases) y para lanzar el servidor hacemos
 
 `npx ng serve` o `npx ng serve -o` para q cuando termine de compilar abra el navegador directamente.
+
+**Cuando existen inconsistencias entre las versiones de los paquetes de Angular, pueden surgir errores de compatibilidad. Para identificar las versiones instaladas, se recomienda utilizar npm list @angular/core y comandos relacionados. Con esta información, podemos evaluar si conviene realizar una actualización (upgrade) o un retroceso (downgrade) para alinear todas las dependencias**
 
 ### Explicacion de los archivos creados x ng new
 
@@ -2043,11 +2053,11 @@ Podemos concatenar pipes, de tal modo que el resultado de uno se lo pasa al sigu
 
 Cambiar el idioma por defecto del datepipe o ir cambiando el idioma segun convenga. 
 
-Para poder trabajar con distintos 'idiomas', gestionar el `locale` tenemos que especificar en el `app.module.ts` o en `main.ts` dependiendo de la version de angular.
+Para poder trabajar con distintos 'idiomas', gestionar el `locale` tenemos que especificar en el `app.module.ts` o en `app.config.ts` dependiendo de la version de angular.
 
 
 ```javascript
-// main.ts
+// app.config.ts
 
 import localeEs from '@angular/common/locales/es';
 import localeEn from '@angular/common/locales/en';
@@ -2057,8 +2067,16 @@ import { registerLocaleData } from '@angular/common';
 registerLocaleData(localeEs);
 registerLocaleData(localeEn);
 
-bootstrapApplication(AppComponent, appConfig)
-  .catch((err) => console.error(err));
+export const appConfig: ApplicationConfig = {
+  providers: [
+    provideZoneChangeDetection({ eventCoalescing: true }),
+    { provide: LOCALE_ID, useValue: 'es' },
+    provideAnimationsAsync(),  // Agregado correctamente
+    provideRouter(routes),
+    providePrimeNG({ theme: { preset: Aura } }),
+    MessageService
+  ]
+};
 
 ```
 
@@ -2120,6 +2138,61 @@ export class AppModule { }
 ```
 
 cargo en las variables `localeEs` y `localeEn` los idipomas  utilizaré y los registro con  `registerLocaleData()` tenemos q tener en cuenta que esto afectará a los pipes : 
+
+### Number Pipe & Currency Pipe
+
+
+Así que '1.6-6' significa:
+
+1 → mínimo 1 dígito antes del separador decimal.
+
+6-6 → entre 6 y 6 decimales ⇒ exactamente 6 decimales.
+
+También aplica separadores de miles según la locale actual.
+
+
+```html
+<div class="grid">
+  <div class="col-12 md:col-4">
+    <p-card header="ventas netas" subheader="del presente año">
+      {{totalSells | number :'1.6-6'}}
+      <!-- {minIntegerDigits}.{minFractionDigits}-{maxFractionDigits} -->
+    </p-card>
+  </div>
+</div>
+
+```
+
+### Async pipe
+
+funciona con observables y con promoses. Ladiferencia es q con obsevrables el async pipe puede hacer el unsubscribe y el destroy en cambio una promesa no se puede eliminar.
+
+
+
+## Angular material
+
+instalacion 
+
+```
+ng add @angular/material@18.2.14
+```
+
+instalamos tb primeflex 
+
+```
+npm install primeflex
+```
+añadimos a los styles de angular.json 
+
+```
+./node_modules/primeflex/primeflex.css
+
+"styles": [
+  "@angular/material/prebuilt-themes/azure-blue.css",
+  "./node_modules/primeflex/primeflex.css",
+  "src/styles.css"
+],
+```
 
 
 

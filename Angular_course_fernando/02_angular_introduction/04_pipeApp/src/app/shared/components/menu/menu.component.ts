@@ -42,8 +42,9 @@ export class MenuComponent implements OnInit{
           icon: PrimeIcons.COG,
           items:[
             {
-              label:"Otros elementos",
-              icon:PrimeIcons.ANDROID
+              label:"Custom Pipes",
+              icon:PrimeIcons.ANDROID,
+              routerLink: 'custom'
             }
           ]
       }

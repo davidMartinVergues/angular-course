@@ -3,16 +3,14 @@ import { CommonModule } from '@angular/common';
 
 import { ProductsRoutingModule } from './products-routing.module';
 import { PrimeNgModule } from '../prime-ng/prime-ng.module';
-import { BasicsPageComponent } from './pages/basics-page/basics-page.component';
-
-
+import { ToggleCasePipe } from './pipes/toggle-case.pipe';
 
 @NgModule({
   declarations: [],
   imports: [
     CommonModule,
     ProductsRoutingModule,
-    PrimeNgModule
+    PrimeNgModule,
   ]
 })
 export class ProductsModule { }
